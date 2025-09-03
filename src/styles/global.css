@@ -31,6 +31,7 @@ body {
 	width: min(90%, 880px);
     margin: auto;
 	height: 100%;
+	color: #bdbdbd;
 }
 main {
 	flex: 1;
