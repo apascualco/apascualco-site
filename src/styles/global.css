@@ -19,15 +19,21 @@
 	font-style: normal;
 	font-display: swap;
 }
+html {
+	height: 100%;
+}
 body {
-	font-family: "Atkinson", sans-serif;
-	background-color: #1c1c1c;
+	display: flex;
+	flex-direction: column;
+	font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+      "Liberation Mono", "Courier New", monospace;
+	background-color: #393939;
+	width: min(90%, 880px);
+    margin: auto;
+	height: 100%;
 }
 main {
-	width: 720px;
-	max-width: calc(100% - 2em);
-	margin: auto;
-	padding: 3em 1em;
+	flex: 1;
 }
 
 .rounded-full {
