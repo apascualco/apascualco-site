@@ -5,7 +5,7 @@ import linkedinICO from "../assets/header/linkedin-50.svg";
 import substackICO from "../assets/header/substack-50.svg";
 import githubICO from "../assets/header/github-48.svg";
 import { SITE_TITLE } from "../consts";
-import HeaderLink from "./HeaderLink.astro";
+import Botton from "./Botton.astro";
 ---
 
 <header>
@@ -14,9 +14,7 @@ import HeaderLink from "./HeaderLink.astro";
       <h1><a href="/apascualco-site">{SITE_TITLE}</a></h1>
       <h2>SSE · 11+ years building scalable software solutions</h2>
     </div>
-    <HeaderLink href={`${import.meta.env.BASE_URL}/about`} class="about-cta"
-      >About / CV</HeaderLink
-    >
+    <Botton href={`${import.meta.env.BASE_URL}/about`}>About & CV</Botton>
 
     <div class="right-stack">
       <Image
@@ -28,19 +26,6 @@ import HeaderLink from "./HeaderLink.astro";
       />
       <div class="subheader-links">
         <a
-          href="https://apascualco.substack.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            width={30}
-            height={30}
-            src={linkedinICO}
-            alt="Substack"
-            class="substack-icon"
-          /></a
-        >
-        <a
           href="https://www.linkedin.com/in/apascualco/"
           target="_blank"
           rel="noopener noreferrer"
@@ -48,9 +33,22 @@ import HeaderLink from "./HeaderLink.astro";
           <Image
             width={30}
             height={30}
-            src={substackICO}
+            src={linkedinICO}
             alt="Linkedin"
             class="linkedin-icon"
+          /></a
+        >
+        <a
+          href="https://apascualco.substack.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Image
+            width={30}
+            height={30}
+            src={substackICO}
+            alt="Substack"
+            class="substack-icon"
           /></a
         >
         <a
@@ -89,7 +87,7 @@ import HeaderLink from "./HeaderLink.astro";
     font-size: 0.8em;
   }
   .avatar {
-    background-color: var(--font);
+    background-color: var(--font-color-normal);
     padding: 2px;
     display: inline-block;
   }
@@ -100,29 +98,12 @@ import HeaderLink from "./HeaderLink.astro";
     padding: 1em 0em;
   }
   nav a {
-    color: var(--font);
+    color: var(--font-color-normal);
   }
   .right-stack {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
-  }
-  .about-cta {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.4rem 0.9rem;
-    border: 1px solid #666666;
-    border-radius: 8px;
-    font-weight: 600;
-    background: #4444440d;
-    text-decoration: none;
-    transition:
-      background 0.15s ease,
-      transform 0.1s ease;
-  }
-  .about-cta:hover {
-    background: #4a4a4a;
-    transform: translateY(-1px);
   }
 </style>

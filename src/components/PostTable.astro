@@ -62,7 +62,7 @@ const groupedPosts = groupPostsByYear(posts);
 
   .post-table {
     width: 100%;
-    color: #e7e7e7;
+    color: var(--font-color-normal);
   }
 
   .table-header {
@@ -71,8 +71,8 @@ const groupedPosts = groupPostsByYear(posts);
     align-items: center;
     gap: 0.5rem;
     padding: 6px 0 10px 0;
-    color: #8b8b8b;
-    border-bottom: 1px solid #4d4c4c;
+    color: var(--font-color-normal);
+    border-bottom: 1px solid var(--border-color);
     text-transform: lowercase;
   }
 
@@ -82,16 +82,16 @@ const groupedPosts = groupPostsByYear(posts);
     align-items: center;
     gap: 0.5rem;
     padding: 15px 0;
-    border-top: 1px solid #4d4c4c;
+    border-top: 1px solid var(--boder-color);
     transition: background-color 0.15s ease;
   }
 
   .table-row:last-child {
-    border-bottom: 1px solid #4d4c4c;
+    border-bottom: 1px solid var(--boder-color);
   }
 
   .table-row:hover {
-    background: #6b6b6b;
+    background: var(--background-hover);
   }
 
   .post-title {
@@ -107,11 +107,11 @@ const groupedPosts = groupPostsByYear(posts);
   }
 
   .col-date-string {
-    color: #9ca3af;
+    color: var(--font-color-normal);
   }
 
   .col-topic {
-    color: #bdbdbd;
+    color: var(--font-color-normal);
   }
 
   .table-row[data-indented="true"] {
