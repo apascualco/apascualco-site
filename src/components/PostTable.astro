@@ -19,7 +19,7 @@ function groupPostsByYear(posts: CollectionEntry<"blog">[]) {
   );
 }
 
-const groupedPosts = groupPostsByYear(posts);
+const groupedPosts = groupPostsByYear(posts.filter((post) => !post.data.draft));
 ---
 
 <section>
@@ -42,9 +42,7 @@ const groupedPosts = groupPostsByYear(posts);
             >
               <div class="table-row">
                 <span class="col-date">{idx === 0 ? year : ""}</span>
-
                 {post.data.title}
-
                 <span>- {post.data.description}</span>
                 <span class="col-topic">{post.data.topic ?? "—"}</span>
               </div>
