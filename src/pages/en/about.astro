@@ -1,0 +1,304 @@
+---
+import AboutHeroImage from "../assets/blog-placeholder-about.jpg";
+import Layout from "../../layouts/AboutCV.astro";
+import Botton from "../../components/Botton.astro";
+---
+
+<Layout title="Sobre mi">
+  <section class="cv-about">
+    <p>
+      I’m <b>Alberto Pascual</b>, and I go beyond the role of <b
+        >Senior Backend Engineer</b
+      >. With more than <b>10 years of experience</b> designing and building <b
+        >scalable solutions</b
+      >, I bring a vision that combines <b>backend architecture</b>, <b
+        >cost efficiency</b
+      >, and <b>DevOps culture</b>, always aiming for technology to deliver
+      <b>true value</b>.
+    </p>
+    <p>
+      I’ve had the opportunity to work with great people in teams of all sizes
+      at companies such as <b>SEAT:CODE</b>, <b>INCOM</b>, <b>BLOOCK</b>, and <b
+        >DEXMA</b
+      >. At <b>SEAT:CODE</b>, I contributed to product improvement by
+      implementing
+      <b>distributed caching</b> and migrating towards a more <b
+        >efficient service-oriented architecture</b
+      >. At <b>VERYCHIC</b>, I promoted <b>engineering best practices</b> by applying
+      <b>SOLID principles</b> and <b>Clean Architecture</b>, strengthening both
+      <b>quality</b> and <b>software maintainability</b>.
+    </p>
+    <p>
+      My profile combines the <b>technical</b> with the <b>personal</b>: a <b
+        >curious reader</b
+      >, an <b>amateur pianist</b>, and above all, someone passionate about <b
+        >solving complex challenges</b
+      >
+      that go beyond <b>known limits</b>, always seeking <b>new perspectives</b>
+      and <b>creative solutions</b>.
+    </p>
+  </section>
+  <div class="cv-download-top">
+    <Botton
+      href={`${import.meta.env.BASE_URL}/download/resume.pdf`}
+      class="about-cta">Descargar CV</Botton
+    >
+  </div>
+  <section class="timeline">
+    <div class="timeline-item left">
+      <span class="date">SSE <- [ Dec 2021 ]</span>
+      <div class="content">
+        <h3>SEAT:CODE</h3>
+        <p>
+          Backend architecture design, cost control, and continuous improvement,
+          with cross-team collaboration.
+        </p>
+      </div>
+    </div>
+
+    <div class="timeline-item right">
+      <span class="date">[ Mar 2022 - May 2024 ] -> Technical Lead</span>
+      <div class="content">
+        <h3>INCOM</h3>
+        <p>
+          Built the platform and APIs from scratch, integrated payment systems,
+          and implemented cost control, with full responsibility for backend and
+          infrastructure.
+        </p>
+      </div>
+    </div>
+
+    <div class="timeline-item left">
+      <span class="date">Lead Engineer <- [ Sep 2021 - Dec 2021 ]</span>
+      <div class="content">
+        <h3>BLOOCK</h3>
+        <p>
+          API integration and improvement in blockchain solutions, while
+          mentoring a fast-growing team.
+        </p>
+      </div>
+    </div>
+
+    <div class="timeline-item right">
+      <span class="date">[ Oct 2020 - Sept 2021 ] -> SSE</span>
+      <div class="content">
+        <h3>Dexma</h3>
+        <p>
+          Ensured platform stability, developed real-time ingestion pipelines,
+          and implemented IoT integrations.
+        </p>
+      </div>
+    </div>
+
+    <div class="timeline-item left">
+      <span class="date">Backend Engineer <- [ Jan 2018 - Oct 2020 ]</span>
+      <div class="content">
+        <h3>VERYCHIC</h3>
+        <p>
+          Developed APIs, batch processes, and AWS Lambdas, applying SOLID
+          principles and Hexagonal Architecture.
+        </p>
+      </div>
+    </div>
+
+    <div class="timeline-item right">
+      <span class="date">[ Sep 2014 - Jan 2018 ] -> Software Developer</span>
+      <div class="content">
+        <h3>GFI Spain</h3>
+        <p>
+          Delivered projects for multiple clients in a technology consultancy
+          environment.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="cv-download-bottom">
+    <Botton
+      href={`${import.meta.env.BASE_URL}/download/resume.pdf`}
+      class="about-cta">Download CV</Botton
+    >
+  </div>
+
+  <section class="languages">
+    <h2>- Languages</h2>
+    <ul>
+      <li><b>Spanish:</b> native</li>
+      <li><b>Catalan:</b> father tongue</li>
+      <li><b>English:</b> intermediate level (in progress)</li>
+    </ul>
+  </section>
+  <section class="education">
+    <h2>- Education</h2>
+    <div class="edu-item">
+      <h3>INSTITUT OBERT DE CATALUNYA (IOC)</h3>
+      <span class="date">2013</span>
+      <p>Higher Technician in Multiplatform Application Development.</p>
+    </div>
+    <div class="edu-item">
+      <h3>UNIVERSITAT OBERTA DE CATALUNYA (UOC)</h3>
+      <span class="date">Present</span>
+      <p>
+        Currently pursuing a degree in Computer Engineering. I especially enjoy
+        the practical approach and flexibility of the UOC, which allows me to
+        dive deeper into topics I am passionate about and connect theory with
+        professional practice.
+      </p>
+    </div>
+  </section>
+
+  <style>
+    .cv-about {
+      border-bottom: 2px solid #444;
+    }
+
+    .cv-about b {
+      color: var(--font-color-normal);
+    }
+    .timeline {
+      position: relative;
+      margin: 0 auto;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 3px;
+      background: var(--boder-color);
+      transform: translateX(-50%);
+    }
+
+    .timeline-item {
+      position: relative;
+      width: 405px;
+      padding: 1rem 1.25rem;
+    }
+
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      top: 1.2rem;
+      width: 16px;
+      height: 16px;
+      background: var(--background);
+      border: 3px solid var(--boder-color);
+      border-radius: 50%;
+      z-index: 1;
+    }
+
+    .timeline-item.left {
+      text-align: right;
+      left: 0;
+    }
+
+    .timeline-item.left p {
+      left: 0;
+      text-align: left;
+    }
+
+    .timeline-item.left::before {
+      right: -11px;
+    }
+
+    .timeline-item.right {
+      left: 50%;
+    }
+
+    .timeline-item.right::before {
+      left: -11px;
+    }
+
+    .content {
+      background: var(--background-highlight);
+      color: var(--font-color-normal);
+      padding: 0.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px var(--box-shadow);
+      font-size: 0.8rem;
+    }
+
+    .content h3 {
+      margin: 0;
+    }
+
+    .left {
+      margin: 0;
+    }
+
+    .date {
+      font-size: 0.85rem;
+      color: var(--font-color-normal);
+      display: block;
+      margin-bottom: 0.5rem;
+      margin-top: 0.4rem;
+    }
+
+    .timeline-item:hover .content {
+      background-color: var(--background-hover);
+    }
+    .timeline-item:hover::before {
+      background: var(--background-hover);
+    }
+
+    .cv-download-top {
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    .cv-download-bottom {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .education,
+    .languages {
+      color: var(--font-color-normal);
+    }
+
+    .education h2,
+    .languages h2 {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid var(--boder-color);
+      padding-bottom: 0.3rem;
+      padding-top: 3rem;
+    }
+
+    .edu-item {
+      margin-bottom: 1.2rem;
+    }
+
+    .edu-item p {
+      font-size: 0.8rem;
+    }
+
+    .edu-item h3 {
+      margin: 0;
+      font-size: 1rem;
+      color: var(--font-color-highlight);
+    }
+
+    .edu-item .date {
+      font-size: 0.85rem;
+      color: var(--font-color-normal);
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    .languages ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .languages li {
+      margin-bottom: 0.5rem;
+      color: var(--font-color-normal);
+    }
+    .languages li b {
+      color: var(--font-color-highlight);
+    }
+  </style>
+</Layout>

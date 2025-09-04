@@ -1,0 +1,94 @@
+---
+// LanguageSwitch.astro
+const STORAGE_KEY = "lang";
+---
+
+<div class="lang-switch" role="group" aria-label="Language">
+  <button type="button" class="opt" data-lang="es" aria-pressed="true"
+    >ES</button
+  >
+  <button type="button" class="opt" data-lang="en" aria-pressed="false"
+    >EN</button
+  >
+  <span class="thumb" aria-hidden="true"></span>
+</div>
+
+<style>
+  .lang-switch {
+    position: relative;
+    display: inline-grid;
+    grid-template-columns: 1fr 1fr;
+    background: var(--background-highlight);
+    border: 1px solid var(--border-color);
+    border-radius: 9999px;
+    user-select: none;
+    box-shadow: 0 2px 6px var(--box-shadow);
+  }
+  .lang-switch .opt {
+    position: relative;
+    z-index: 1;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    font: inherit;
+    color: var(--font);
+    padding: 0.4rem 0.9rem;
+    border-radius: 9999px;
+    transition:
+      color 0.15s ease,
+      transform 0.06s ease;
+  }
+  .lang-switch .opt:focus-visible {
+    outline: 2px solid var(--border-color);
+    outline-offset: 2px;
+  }
+  .lang-switch .opt:active {
+    transform: translateY(1px);
+  }
+
+  .lang-switch .thumb {
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    width: calc(50% - 4px);
+    background: var(--background-hover);
+    border-radius: 9999px;
+    transition: left 0.18s ease;
+    left: 4px; /* ES por defecto */
+  }
+  html[data-lang="en"] .lang-switch .thumb {
+    left: calc(50% + 4px);
+  }
+  html[data-lang="en"] .lang-switch .opt[data-lang="en"] {
+    color: var(--font-color-highlight);
+  }
+  html[data-lang="es"] .lang-switch .opt[data-lang="es"] {
+    color: var(--font-color-highlight);
+  }
+</style>
+
+<script>
+  const STORAGE_KEY = "lang";
+  const root = document.documentElement;
+  const group = document.currentScript?.parentElement || document;
+  const btns = group.querySelectorAll<HTMLButtonElement>(".opt");
+
+  function applyLang(lang: string) {
+    root.setAttribute("lang", lang);
+    root.setAttribute("data-lang", lang);
+    try {
+      localStorage.setItem(STORAGE_KEY, lang);
+    } catch {}
+  }
+
+  btns.forEach((b) => {
+    b.addEventListener("click", () => {
+      const currentLang = document.documentElement.getAttribute("data-lang");
+      const newLang = b.dataset.lang || "es";
+      if (currentLang !== newLang) {
+        applyLang(newLang);
+        window.location.href = `${import.meta.env.BASE_URL}/${newLang}/`;
+      }
+    });
+  });
+</script>

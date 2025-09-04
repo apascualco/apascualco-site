@@ -12,6 +12,17 @@
 	--boder-color: #666666;
 	--box-shadow: rgba(0, 0, 0, 0.3);
 }
+
+html[data-theme="light"] {
+	--font-color-normal: #333333;
+	--font-color-highlight: #222222;
+	--background: #f7f7f7;
+	--background-highlight: #ffffff;
+	--background-hover: #9a9a9a;
+	--border-color: #cccccc;
+	--box-shadow: rgba(0, 0, 0, 0.12);
+}
+
 @font-face {
 	font-family: "Atkinson";
 	src: url("/apascualco-site/fonts/atkinson-regular.woff") format("woff");
@@ -39,7 +50,7 @@ body {
 	width: min(90%, 880px);
     margin: auto;
 	height: 100%;
-	color: #bdbdbd;
+	color:  var(--font-color-normal);
 }
 main {
 	flex: 1;
@@ -47,4 +58,10 @@ main {
 
 .rounded-full {
     border-radius: 9999px;
+}
+
+/* MD formar for post */
+.prose p img {
+	display: block;
+	margin: 1rem auto;
 }

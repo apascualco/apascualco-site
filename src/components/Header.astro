@@ -6,16 +6,36 @@ import substackICO from "../assets/header/substack-50.svg";
 import githubICO from "../assets/header/github-48.svg";
 import { SITE_TITLE } from "../consts";
 import Botton from "./Botton.astro";
+import ThemeToggle from "./ThemeToggle.astro";
+import LanguageToggle from "./LanguageToggle.astro";
+
+export interface Props {
+  lang: "es" | "en";
+}
+
+const { lang } = Astro.props;
+
+const safeLang: "es" | "en" = lang === "en" ? "en" : "es";
+
+const subtitle =
+  safeLang === "es"
+    ? "SSE · Más de 11 años construyendo software escalable"
+    : "SSE · 11+ years building scalable software solutions";
 ---
 
 <header>
   <nav class="header-grid">
     <div>
       <h1><a href="/apascualco-site">{SITE_TITLE}</a></h1>
-      <h2>SSE · 11+ years building scalable software solutions</h2>
+      <h2>{subtitle}</h2>
     </div>
-    <Botton href={`${import.meta.env.BASE_URL}/about`}>About & CV</Botton>
-
+    <div>
+      <Botton href={`${import.meta.env.BASE_URL}/${lang}/about`}
+        >About & CV</Botton
+      >
+      <ThemeToggle />
+      <LanguageToggle />
+    </div>
     <div class="right-stack">
       <Image
         width={60}

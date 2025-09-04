@@ -3,9 +3,10 @@ import type { CollectionEntry } from "astro:content";
 
 export interface Props {
   posts: CollectionEntry<"blog">[];
+  lang: "es" | "en";
 }
 
-const { posts } = Astro.props;
+const { posts, lang } = Astro.props;
 
 function groupPostsByYear(posts: CollectionEntry<"blog">[]) {
   return posts.reduce(
@@ -19,7 +20,11 @@ function groupPostsByYear(posts: CollectionEntry<"blog">[]) {
   );
 }
 
-const groupedPosts = groupPostsByYear(posts.filter((post) => !post.data.draft));
+const groupedPosts = groupPostsByYear(
+  posts
+    .filter((post) => !post.data.draft)
+    .filter((post) => post.data.lang === lang)
+);
 ---
 
 <section>
@@ -37,7 +42,7 @@ const groupedPosts = groupPostsByYear(posts.filter((post) => !post.data.draft));
         .map(([year, posts]) =>
           posts.map((post, idx) => (
             <a
-              href={`${import.meta.env.BASE_URL}/blog/${post.id}/`}
+              href={`${import.meta.env.BASE_URL}/blog/${post.id}`}
               class="col-title post-title"
             >
               <div class="table-row">

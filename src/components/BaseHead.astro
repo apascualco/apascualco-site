@@ -77,3 +77,19 @@ const { title, description, image = FallbackImage } = Astro.props;
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image.src, Astro.url)} />
+<script is:inline>
+  (function () {
+    try {
+      var lang = localStorage.getItem("lang") || "es";
+      var root = document.documentElement;
+      root.setAttribute("lang", lang);
+      root.setAttribute("data-lang", lang);
+      root.classList.add("pre-lang");
+    } catch (e) {}
+  })();
+</script>
+<style is:global>
+  .pre-lang * {
+    transition: none !important;
+  }
+</style>

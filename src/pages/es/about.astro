@@ -1,7 +1,7 @@
 ---
 import AboutHeroImage from "../assets/blog-placeholder-about.jpg";
-import Layout from "../layouts/AboutCV.astro";
-import Botton from "../components/Botton.astro";
+import Layout from "../../layouts/AboutCV.astro";
+import Botton from "../../components/Botton.astro";
 ---
 
 <Layout title="Sobre mi">
@@ -237,11 +237,11 @@ import Botton from "../components/Botton.astro";
       margin-top: 0.4rem;
     }
 
+    .timeline-item:hover .content {
+      background-color: var(--background-hover);
+    }
     .timeline-item:hover::before {
       background: var(--background-hover);
-    }
-    .content:hover {
-      background-color: var(--background-hover);
     }
 
     .cv-download-top {

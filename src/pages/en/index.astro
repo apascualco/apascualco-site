@@ -1,0 +1,29 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+import { getCollection } from "astro:content";
+import BaseHead from "../../components/BaseHead.astro";
+import { SITE_DESCRIPTION, SITE_TITLE } from "../../consts";
+import Footer from "../../components/Footer.astro";
+import Header from "../../components/Header.astro";
+import PostTable from "../../components/PostTable.astro";
+const posts: CollectionEntry<"blog">[] = (await getCollection("blog")).sort(
+  (a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf()
+);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body>
+    <Header lang="en" />
+    <main>
+      <section>
+        <PostTable posts={posts} lang="en" />
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>

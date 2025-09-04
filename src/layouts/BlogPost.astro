@@ -73,9 +73,11 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
   }
   .prose {
     width: 100%;
-    margin: auto;
-    padding: 1em;
     color: rgb(var(--gray-dark));
+  }
+
+  .prose p img {
+    margin: 1rem auto;
   }
 
   .title {
@@ -117,5 +119,9 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
   .description .bullet {
     font-size: 3em;
     line-height: 1;
+  }
+
+  :global(p) {
+    /* reglas globales para <p> */
   }
 </style>

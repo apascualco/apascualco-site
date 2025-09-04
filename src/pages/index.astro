@@ -1,29 +1,19 @@
 ---
-import BaseHead from "../components/BaseHead.astro";
-import Footer from "../components/Footer.astro";
-import Header from "../components/Header.astro";
-import PostTable from "../components/PostTable.astro";
-import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
-import type { CollectionEntry } from "astro:content";
-
-import { getCollection } from "astro:content";
-const posts: CollectionEntry<"blog">[] = (await getCollection("blog")).sort(
-  (a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf()
-);
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
-    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <meta charset="utf-8" />
+    <title>{SITE_TITLE}</title>
+    <meta name="description" content={SITE_DESCRIPTION} />
+    <meta
+      http-equiv="refresh"
+      content={`0; url=${import.meta.env.BASE_URL}/es/`}
+    />
   </head>
   <body>
-    <Header />
-    <main>
-      <section>
-        <PostTable posts={posts} />
-      </section>
-    </main>
-    <Footer />
+    <p>Redirecting to <a href=`${import.meta.env.BASE_URL}/es`>/es/</a>...</p>
   </body>
 </html>
