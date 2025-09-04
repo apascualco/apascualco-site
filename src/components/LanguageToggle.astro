@@ -1,6 +1,5 @@
 ---
 // LanguageSwitch.astro
-const STORAGE_KEY = "lang";
 ---
 
 <div class="lang-switch" role="group" aria-label="Language">
@@ -31,8 +30,8 @@ const STORAGE_KEY = "lang";
     background: transparent;
     cursor: pointer;
     font: inherit;
-    color: var(--font);
-    padding: 0.4rem 0.9rem;
+    color: var(--font-color-normal);
+    padding: 0.4rem 0.5rem;
     border-radius: 9999px;
     transition:
       color 0.15s ease,
@@ -50,14 +49,14 @@ const STORAGE_KEY = "lang";
     position: absolute;
     top: 4px;
     bottom: 4px;
-    width: calc(50% - 4px);
+    width: calc(50% - 2px);
     background: var(--background-hover);
     border-radius: 9999px;
     transition: left 0.18s ease;
-    left: 4px; /* ES por defecto */
+    left: 4px;
   }
   html[data-lang="en"] .lang-switch .thumb {
-    left: calc(50% + 4px);
+    left: calc(50% + 1px);
   }
   html[data-lang="en"] .lang-switch .opt[data-lang="en"] {
     color: var(--font-color-highlight);

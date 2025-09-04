@@ -5,7 +5,7 @@ import linkedinICO from "../assets/header/linkedin-50.svg";
 import substackICO from "../assets/header/substack-50.svg";
 import githubICO from "../assets/header/github-48.svg";
 import { SITE_TITLE } from "../consts";
-import Botton from "./Botton.astro";
+import Button from "./Button.astro";
 import ThemeToggle from "./ThemeToggle.astro";
 import LanguageToggle from "./LanguageToggle.astro";
 
@@ -24,17 +24,10 @@ const subtitle =
 ---
 
 <header>
-  <nav class="header-grid">
+  <div class="header-grid">
     <div>
       <h1><a href="/apascualco-site">{SITE_TITLE}</a></h1>
       <h2>{subtitle}</h2>
-    </div>
-    <div>
-      <Botton href={`${import.meta.env.BASE_URL}/${lang}/about`}
-        >About & CV</Botton
-      >
-      <ThemeToggle />
-      <LanguageToggle />
     </div>
     <div class="right-stack">
       <Image
@@ -44,47 +37,55 @@ const subtitle =
         alt="Alberto Pascual Corpas"
         class="avatar rounded-full"
       />
-      <div class="subheader-links">
-        <a
-          href="https://www.linkedin.com/in/apascualco/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            width={30}
-            height={30}
-            src={linkedinICO}
-            alt="Linkedin"
-            class="linkedin-icon"
-          /></a
-        >
-        <a
-          href="https://apascualco.substack.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            width={30}
-            height={30}
-            src={substackICO}
-            alt="Substack"
-            class="substack-icon"
-          /></a
-        >
-        <a
-          href="https://github.com/apascualco/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            width={30}
-            height={30}
-            src={githubICO}
-            alt="github"
-            class="github-icon"
-          /></a
-        >
-      </div>
+    </div>
+  </div>
+  <nav>
+    <Button
+      href={`${import.meta.env.BASE_URL}/${lang}/about`}
+      class="header-button">About & CV</Button
+    >
+    <div class="header-social-config">
+      <a
+        href="https://www.linkedin.com/in/apascualco/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Image
+          width={33}
+          height={33}
+          src={linkedinICO}
+          alt="Linkedin"
+          class="linkedin-icon"
+        /></a
+      >
+      <a
+        href="https://apascualco.substack.com"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Image
+          width={33}
+          height={33}
+          src={substackICO}
+          alt="Substack"
+          class="substack-icon"
+        /></a
+      >
+      <a
+        href="https://github.com/apascualco/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Image
+          width={33}
+          height={33}
+          src={githubICO}
+          alt="github"
+          class="github-icon"
+        /></a
+      >
+      <ThemeToggle />
+      <LanguageToggle />
     </div>
   </nav>
 </header>
@@ -115,9 +116,20 @@ const subtitle =
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1em 0em;
+    padding: 0em 0em;
+    margin-bottom: 2rem;
   }
   nav a {
+    color: var(--font-color-normal);
+  }
+
+  .header-grid {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1em 0em;
+  }
+  .header-grid a {
     color: var(--font-color-normal);
   }
   .right-stack {
@@ -125,5 +137,23 @@ const subtitle =
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
+  }
+  :global(.header-button) {
+    height: 30px !important;
+    line-height: 1 !important;
+    padding: 0 1.2rem !important;
+    display: inline-flex !important;
+  }
+  .header-social-config {
+    display: flex;
+    align-items: center; /* todos al centro vertical */
+    gap: 0.5rem;
+  }
+
+  .header-social-config a {
+    display: flex; /* cada link centra su img */
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
   }
 </style>

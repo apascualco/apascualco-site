@@ -1,7 +1,7 @@
 ---
 import AboutHeroImage from "../assets/blog-placeholder-about.jpg";
 import Layout from "../../layouts/AboutCV.astro";
-import Botton from "../../components/Botton.astro";
+import Button from "../../components/Button.astro";
 ---
 
 <Layout title="Sobre mi">
@@ -43,9 +43,9 @@ import Botton from "../../components/Botton.astro";
     </p>
   </section>
   <div class="cv-download-top">
-    <Botton
+    <Button
       href={`${import.meta.env.BASE_URL}/download/resume.pdf`}
-      class="about-cta">Descargar CV</Botton
+      class="about-cta">Descargar CV</Button
     >
   </div>
   <section class="timeline">
@@ -116,9 +116,9 @@ import Botton from "../../components/Botton.astro";
     </div>
   </section>
   <div class="cv-download-bottom">
-    <Botton
+    <Button
       href={`${import.meta.env.BASE_URL}/download/resume.pdf`}
-      class="about-cta">Descargar CV</Botton
+      class="about-cta">Descargar CV</Button
     >
   </div>
   <section class="languages">

@@ -8,7 +8,8 @@ import Header from "../components/Header.astro";
 
 type Props = CollectionEntry<"blog">["data"];
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, lang } =
+  Astro.props;
 ---
 
 <html lang="en">
@@ -17,7 +18,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
   </head>
 
   <body>
-    <Header />
+    <Header lang={lang} />
     <main>
       <article>
         <div class="hero-image">
