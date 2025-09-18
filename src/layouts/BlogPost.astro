@@ -33,7 +33,7 @@ const { title, description, pubDate, updatedDate, heroImage, lang } =
             <div class="left">
               <p class="description">
                 <span class="bullet">&bull;</span>
-                {description}
+                <span class="text">{description}</span>
               </p>
             </div>
             <div class="right">
@@ -120,6 +120,14 @@ const { title, description, pubDate, updatedDate, heroImage, lang } =
   .description .bullet {
     font-size: 3em;
     line-height: 1;
+  }
+
+  .description .text {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   :global(p) {

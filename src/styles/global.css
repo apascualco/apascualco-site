@@ -46,8 +46,8 @@ body {
 	font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
       "Liberation Mono", "Courier New", monospace;
 	background-color: var(--background);
-	min-width: 890px;
-	width: min(90%, 880px);
+	min-width: 1020;
+	width: min(90%, 1021px);
     margin: auto;
 	height: 100%;
 	color:  var(--font-color-normal);
