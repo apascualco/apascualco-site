@@ -12,7 +12,7 @@ const redirectTo = `${import.meta.env.BASE_URL}es/`;
     <meta http-equiv="refresh" content={`0; url=${redirectTo}`} />
     <script is:inline>
       setTimeout(() => {
-        window.location.href = "{redirectTo}";
+        window.location.href = "{`${redirectTo}`}";
       }, 100);
     </script>
   </head>
