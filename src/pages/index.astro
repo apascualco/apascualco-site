@@ -1,6 +1,5 @@
 ---
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
-const redirectTo = `${import.meta.env.BASE_URL}es/`;
 ---
 
 <!doctype html>
@@ -9,14 +8,14 @@ const redirectTo = `${import.meta.env.BASE_URL}es/`;
     <meta charset="utf-8" />
     <title>{SITE_TITLE}</title>
     <meta name="description" content={SITE_DESCRIPTION} />
-    <meta http-equiv="refresh" content={`0; url=${redirectTo}`} />
+    <meta http-equiv="refresh" content={`0; url="/es/"`} />
     <script is:inline>
       setTimeout(() => {
-        window.location.href = "{`${redirectTo}`}";
+        window.location.href = "/es";
       }, 100);
     </script>
   </head>
   <body>
-    <p>Redirecting to <a href={redirectTo}>{redirectTo}</a>...</p>
+    <p>Redirecting to <a href="/es" }>es</a>...</p>
   </body>
 </html>

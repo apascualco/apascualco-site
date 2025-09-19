@@ -41,10 +41,7 @@ const groupedPosts = groupPostsByYear(
         .sort((a, b) => Number(b[0]) - Number(a[0]))
         .map(([year, posts]) =>
           posts.map((post, idx) => (
-            <a
-              href={`${import.meta.env.BASE_URL}/blog/${post.id}`}
-              class="table-row"
-            >
+            <a href={`/blog/${post.id}`} class="table-row">
               <span class="col-date">{idx === 0 ? year : ""}</span>
               <span class="col-title">{post.data.title}</span>
               <span class="col-subtitle">- {post.data.description}</span>
