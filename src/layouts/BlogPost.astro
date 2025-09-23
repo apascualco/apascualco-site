@@ -50,7 +50,9 @@ const { title, description, pubDate, updatedDate, heroImage, lang } =
               <h1>{title}</h1>
             </div>
           </div>
-          <slot />
+          <article class="content">
+            <slot />
+          </article>
         </div>
       </article>
     </main>
@@ -130,7 +132,62 @@ const { title, description, pubDate, updatedDate, heroImage, lang } =
     text-overflow: ellipsis;
   }
 
-  :global(p) {
-    /* reglas globales para <p> */
+  :global(.content a) {
+    color: var(--font-color-highlight);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+    transition:
+      color 0.2s,
+      border-bottom-color 0.2s;
+  }
+
+  :global(.content a:hover) {
+    color: var(--font-color-accent);
+    border-bottom-color: currentColor;
+  }
+  :global(.content h1) {
+    font-size: clamp(1.8rem, 1rem + 2vw, 2.4rem);
+    line-height: 1.25;
+    letter-spacing: -0.005em;
+    margin: 1.6rem 0 0.8rem;
+    color: var(--font-color-highlight);
+  }
+
+  :global(.content h2) {
+    font-size: clamp(1.4rem, 0.95rem + 1.4vw, 1.7rem);
+    line-height: 1.28;
+    margin: 1.4rem 0 0.6rem;
+    color: var(--font-color-highlight);
+  }
+
+  :global(.content h3) {
+    font-size: clamp(1.15rem, 0.9rem + 0.8vw, 1.35rem);
+    line-height: 1.3;
+    margin: 1rem 0 0.5rem;
+    color: var(--font-color-normal);
+  }
+  :global(.content h1[id]),
+  :global(.content h2[id]),
+  :global(.content h3[id]) {
+    scroll-margin-top: 96px;
+  }
+  :global(.content pre.astro-code) {
+    padding: 1rem 1.25rem;
+    margin: 1.25rem 0;
+    border-radius: 10px;
+    overflow: auto;
+    line-height: 1.55;
+  }
+
+  :global(.content pre.astro-code > code) {
+    display: block;
+    padding: 0;
+    background: transparent;
+  }
+
+  :global(.content :not(pre) > code) {
+    padding: 0.15rem 0.35rem;
+    border-radius: 6px;
+    background: rgba(127, 127, 127, 0.12);
   }
 </style>
