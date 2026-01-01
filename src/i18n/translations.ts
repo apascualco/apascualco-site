@@ -2,29 +2,19 @@ export type Lang = 'es' | 'en';
 
 export const translations = {
   es: {
-    // Header
     skipToContent: 'Saltar al contenido',
     aboutAndCV: 'About & CV',
-
-    // PostTable
     tableTitle: 'título',
     tableSubtitle: 'subtítulo',
     tableTag: 'tag',
-
-    // BlogPost
     lastUpdatedOn: 'Actualizado el',
   },
   en: {
-    // Header
     skipToContent: 'Skip to content',
     aboutAndCV: 'About & CV',
-
-    // PostTable
     tableTitle: 'title',
     tableSubtitle: 'subtitle',
     tableTag: 'tag',
-
-    // BlogPost
     lastUpdatedOn: 'Last updated on',
   },
 } as const;

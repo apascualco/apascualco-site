@@ -84,12 +84,9 @@
     updateAriaCurrent(lang);
     try {
       localStorage.setItem(STORAGE_KEY, lang);
-    } catch {
-      // localStorage may be unavailable in private browsing
-    }
+    } catch {} // eslint-disable-line no-empty
   }
 
-  // Detect current language from URL
   const pathLang = window.location.pathname.split('/')[1];
   const currentLang = pathLang === 'en' || pathLang === 'es' ? pathLang : 'es';
   updateAriaCurrent(currentLang);
