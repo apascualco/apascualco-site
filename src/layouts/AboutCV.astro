@@ -2,17 +2,24 @@
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import type { Lang } from '../i18n/translations';
 
-const { title } = Astro.props;
+interface Props {
+  title: string;
+  description: string;
+  lang: Lang;
+}
+
+const { title, description, lang } = Astro.props;
 ---
 
-<html lang="en">
+<html lang={lang}>
   <head>
-    <BaseHead title={title} description="DE" />
+    <BaseHead title={title} description={description} />
   </head>
 
   <body>
-    <Header />
+    <Header lang={lang} />
     <main id="main-content">
       <article>
         <div class="prose">
