@@ -1,5 +1,5 @@
 ---
-const label = "Toggle theme";
+const label = 'Toggle theme';
 ---
 
 <button class="theme-toggle" aria-label={label} title={label}>
@@ -9,70 +9,77 @@ const label = "Toggle theme";
 
 <style>
   .theme-toggle {
-    margin-top:;
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
-    padding: 0.45rem 0.8rem;
+    justify-content: center;
+    width: 33px;
+    height: 33px;
+    padding: 0;
     border: 1px solid var(--border-color);
     background: var(--background-highlight);
     color: var(--font);
-    border-radius: 9999px;
+    border-radius: 8px;
     cursor: pointer;
-    box-shadow: 0 2px 6px var(--box-shadow);
-    transition:
-      background 0.15s ease,
-      transform 0.08s ease;
+    transition: background 0.15s ease;
+    font-size: 1rem;
   }
   .theme-toggle:hover {
     background: var(--background-hover);
-    transform: translateY(0px);
   }
   .theme-toggle .sun {
     display: none;
   }
-
-  html[data-theme="light"] .theme-toggle .sun {
+  html[data-theme='light'] .theme-toggle .sun {
     display: inline;
   }
-  html[data-theme="light"] .theme-toggle .moon {
+  html[data-theme='light'] .theme-toggle .moon {
     display: none;
+  }
+
+  @media (max-width: 560px) {
+    .theme-toggle {
+      width: 28px;
+      height: 28px;
+      font-size: 0.85rem;
+    }
   }
 </style>
 
 <script>
-  const STORAGE_KEY = "theme";
+  const STORAGE_KEY = 'theme';
   const root = document.documentElement;
 
   function applyTheme(theme) {
-    if (theme === "light") root.setAttribute("data-theme", "light");
-    else root.removeAttribute("data-theme");
+    if (theme === 'light') root.setAttribute('data-theme', 'light');
+    else root.removeAttribute('data-theme');
     try {
       localStorage.setItem(STORAGE_KEY, theme);
-    } catch {}
+    } catch {
+      /* localStorage unavailable */
+    }
   }
 
   (function init() {
     let saved = null;
     try {
       saved = localStorage.getItem(STORAGE_KEY);
-    } catch {}
+    } catch {
+      /* localStorage unavailable */
+    }
     if (!saved) {
-      const prefersLight = window.matchMedia(
-        "(prefers-color-scheme: light)"
-      ).matches;
-      saved = prefersLight ? "light" : "dark";
+      const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+      saved = prefersLight ? 'light' : 'dark';
     }
     applyTheme(saved);
   })();
 
   const scope = document.currentScript?.parentElement || document;
-  const btn = scope.querySelector(".theme-toggle");
+  const btn = scope.querySelector('.theme-toggle');
 
   if (btn) {
-    btn.addEventListener("click", () => {
-      const isLight = root.getAttribute("data-theme") === "light";
-      applyTheme(isLight ? "dark" : "light");
+    btn.addEventListener('click', () => {
+      const isLight = root.getAttribute('data-theme') === 'light';
+      applyTheme(isLight ? 'dark' : 'light');
     });
   }
 </script>

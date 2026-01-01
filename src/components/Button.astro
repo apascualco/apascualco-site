@@ -37,4 +37,11 @@ const isActive = href === pathname || href === '/' + (subpath?.[0] || '');
     background: var(--background-hover);
     transform: translateY(-1px);
   }
+
+  @media (max-width: 560px) {
+    a {
+      min-height: 44px;
+      padding: 0.5rem 1rem;
+    }
+  }
 </style>

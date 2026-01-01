@@ -3,7 +3,7 @@ export type Lang = 'es' | 'en';
 export const translations = {
   es: {
     skipToContent: 'Saltar al contenido',
-    aboutAndCV: 'About & CV',
+    aboutAndCV: 'Perfil',
     tableTitle: 'título',
     tableSubtitle: 'subtítulo',
     tableTag: 'tag',
@@ -11,7 +11,7 @@ export const translations = {
   },
   en: {
     skipToContent: 'Skip to content',
-    aboutAndCV: 'About & CV',
+    aboutAndCV: 'Profile',
     tableTitle: 'title',
     tableSubtitle: 'subtitle',
     tableTag: 'tag',
