@@ -8,4 +8,7 @@ export default defineConfig({
   site: 'https://www.apascualco.com',
   base: '/',
   integrations: [mdx(), sitemap()],
+  image: {
+    experimentalLayout: 'responsive',
+  },
 });
