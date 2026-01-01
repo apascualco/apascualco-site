@@ -1,21 +1,23 @@
 ---
-title: "Proximidad semántica"
-description: "De palabras a vectores: la proximidad semántica como interfaz de comprensión"
-pubDate: "Sep 23 2025"
-topic: "Proximidad semántica y búsqueda vectorial"
-tags: [  "proximidad semántica",
-    "embeddings",
-    "pgvector",
-    "procesamiento del lenguaje natural",
-    "búsqueda semántica",
-    "lingüística computacional",
-    "vectorización",
-    "nomic-embed-text",
-    "inteligencia artificial",
-    "modelos de lenguaje"
-]
+title: 'Proximidad semántica'
+description: 'De palabras a vectores: la proximidad semántica como interfaz de comprensión'
+pubDate: 'Sep 23 2025'
+topic: 'Proximidad semántica y búsqueda vectorial'
+tags:
+  [
+    'proximidad semántica',
+    'embeddings',
+    'búsqueda semántica',
+    'NLP',
+    'pgvector',
+    'PostgreSQL',
+    'Kotlin',
+    'inteligencia artificial',
+    'vectores',
+    'word2vec',
+  ]
 draft: false
-lang: "es"
+lang: 'es'
 heroImage: '../../assets/post/psemantica.png'
 ---
 
@@ -24,23 +26,24 @@ import psemantica from '../../assets/post/psemantica1.png';
 
 # Índice
 
-1. [Contexto](#contexto)  
-2. [Explicación del concepto / teoría](#explicación-del-concepto--teoría)  
-3. [Aplicaciones actuales y relevancia](#aplicaciones-actuales-y-relevancia)  
-4. [Ejemplo práctico: Kotlin + PGVector](#ejemplo-práctico-kotlin--pgvector)  
-5. [Limitaciones y debates](#limitaciones-y-debates)  
-6. [Conclusión / síntesis](#conclusión--síntesis)  
+1. [Contexto](#contexto)
+2. [Explicación del concepto / teoría](#explicación-del-concepto--teoría)
+3. [Aplicaciones actuales y relevancia](#aplicaciones-actuales-y-relevancia)
+4. [Ejemplo práctico: Kotlin + PGVector](#ejemplo-práctico-kotlin--pgvector)
+5. [Limitaciones y debates](#limitaciones-y-debates)
+6. [Conclusión / síntesis](#conclusión--síntesis)
 7. [Fuentes y lecturas recomendadas](#fuentes-y-lecturas-recomendadas)
 
 Antes de que los niños aprendan a definir conceptos con precisión, ya pueden agrupar objetos por "parecidos". Un niño pequeño, al procesar la información sensorial y simbólica que recibe, tiende a colocar al perro y al gato en una región próxima dentro de **su interpretación del mundo**. Por eso, los llama igual. No es exactamente un error: podríamos considerarlo una forma temprana de razonamiento por similitud, una intuición primitiva de lo que hoy entendemos como **proximidad semántica**.
 
-En su estudio longitudinal, considerado **seminal** en el campo, _Similarity, Specificity and Contrast_ (1986), Dromi y Fishelzon observaron que los niños categorizan el mundo no por definiciones fijas, sino por relaciones de **similitud difusa**. Lo que hoy la inteligencia artificial hace con vectores, el cerebro lo intuyó desde la infancia: lo similar se agrupa, aunque no se nombre igual.
+En su estudio longitudinal, considerado **seminal** en el campo, *Similarity, Specificity and Contrast* (1986), Dromi y Fishelzon observaron que los niños categorizan el mundo no por definiciones fijas, sino por relaciones de **similitud difusa**. Lo que hoy la inteligencia artificial hace con vectores, el cerebro lo intuyó desde la infancia: lo similar se agrupa, aunque no se nombre igual.
 
 Esa intuición es ahora tecnología: la **proximidad semántica** permite que los sistemas modernos “entiendan” más allá del texto literal. _Este salto se dio cuando el lenguaje dejó de procesarse como texto plano y empezó a modelarse como vectores numéricos en espacios de alta dimensión_. Modelos como word2vec, GloVe o BERT aprendieron a representar significados en coordenadas, permitiendo que operaciones matemáticas aproximen relaciones semánticas. Así, lo que antes era interpretación difusa, hoy se transforma en cálculo sobre distancias. ¿Cómo se modela eso? ¿Cómo lo usamos en software real?
 
 # Contexto
 
 El concepto de similitud semántica no es nuevo. En lingüística computacional, ya en los años 50 se hablaba de coocurrencia de términos y análisis de contexto. Pero luego vinieron varios saltos clave:
+
 - **word2vec** (2013): permitió representar palabras como vectores que capturan similitudes de contexto. Gracias a ello, conceptos relacionados aparecen cerca en un espacio vectorial, permitiendo incluso operaciones como `king - man + woman ≈ queen`. https://es.wikipedia.org/wiki/Word2vec
 - **BERT** y modelos posteriores: llevaron la idea más allá al generar vectores que dependen del contexto en que aparece cada palabra, permitiendo una comprensión más precisa y matizada del lenguaje. https://es.wikipedia.org/wiki/BERT_(modelo_de_lenguaje)
 
@@ -57,25 +60,25 @@ La **proximidad semántica** mide qué tan cerca están dos elementos en un es
 Ejemplo:
 
 ```kotlin
-import kotlin.math.sqrt  
-  
-fun main() {  
-    val cat = listOf(0.1, 0.3, 0.5)  
-    val dog = listOf(0.12, 0.1, 0.52)  
-    val cosSim = cosine(cat, dog)  
-    println(cosSim)  
-}  
-  
-fun cosine(a: List<Double>, b: List<Double>): Double {  
-    val dotProduct = a.zip(b).sumOf { (x, y) -> x * y }  
-    val magnitudeA = sqrt(a.sumOf { it * it })  
-    val magnitudeB = sqrt(b.sumOf { it * it })  
-  
-    return if (magnitudeA != 0.0 && magnitudeB != 0.0) {  
-        dotProduct / (magnitudeA * magnitudeB)  
-    } else {  
-        0.0  
-    }  
+import kotlin.math.sqrt
+
+fun main() {
+    val cat = listOf(0.1, 0.3, 0.5)
+    val dog = listOf(0.12, 0.1, 0.52)
+    val cosSim = cosine(cat, dog)
+    println(cosSim)
+}
+
+fun cosine(a: List<Double>, b: List<Double>): Double {
+    val dotProduct = a.zip(b).sumOf { (x, y) -> x * y }
+    val magnitudeA = sqrt(a.sumOf { it * it })
+    val magnitudeB = sqrt(b.sumOf { it * it })
+
+    return if (magnitudeA != 0.0 && magnitudeB != 0.0) {
+        dotProduct / (magnitudeA * magnitudeB)
+    } else {
+        0.0
+    }
 }
 ```
 
@@ -88,6 +91,7 @@ Sin embargo, en espacios de alta dimensión como los generados por embeddings, e
 # Aplicaciones actuales y relevancia
 
 **¿Para qué sirve esto en software moderno?**
+
 - **Recomendadores**: mostrar contenido similar a lo que el usuario ya vio.
 - **Búsqueda semántica**: más allá de keywords exactas.
 - **Clasificación**: identificar intenciones o temas aunque no haya coincidencia textual.
@@ -102,34 +106,34 @@ Supongamos que tienes una tabla `text` y cada entrada tiene un campo `embeddi
 Primero creamos la tabla y un índice HNSW para optimizar la búsqueda por similitud:
 
 ```kotlin
-CREATE EXTENSION IF NOT EXISTS vector;  
-CREATE TABLE text (  
-   id UUID PRIMARY KEY,  
-   content TEXT,  
-   embedding vector(768)  
-);  
-  
-CREATE INDEX idx_embeddings_hnsw_cosine  
-    ON text  
+CREATE EXTENSION IF NOT EXISTS vector;
+CREATE TABLE text (
+   id UUID PRIMARY KEY,
+   content TEXT,
+   embedding vector(768)
+);
+
+CREATE INDEX idx_embeddings_hnsw_cosine
+    ON text
     USING hnsw (embedding vector_cosine_ops);
 ```
 
 La consulta en Kotlin usando Spring Data JPA sería:
 
 ```kotlin
-@Query(  
-    value = """  
-        SELECT content AS text,               
-	        1-(embedding <=> CAST(:embedding AS vector)) AS score  
-        FROM text  
-        ORDER BY embedding <=> CAST(:embedding AS vector) DESC  
-        LIMIT :limit  
-    """,  
-    nativeQuery = true,  
-)  
-fun findMostSimilar(  
-    @Param("embedding") embedding: String,  
-    @Param("limit") limit: Int = 5,  
+@Query(
+    value = """
+        SELECT content AS text,
+	        1-(embedding <=> CAST(:embedding AS vector)) AS score
+        FROM text
+        ORDER BY embedding <=> CAST(:embedding AS vector) DESC
+        LIMIT :limit
+    """,
+    nativeQuery = true,
+)
+fun findMostSimilar(
+    @Param("embedding") embedding: String,
+    @Param("limit") limit: Int = 5,
 ): List<Text>
 ```
 
@@ -137,7 +141,7 @@ Aquí usamos el operador `<=>` de PGVector, que mide **distancia por similitu
 
 Puedes ver un ejemplo completo en este repositorio: [github.com/apascualco/semantic-search](https://github.com/apascualco/semantic-search)
 
-<figure style={{ margin: '2rem auto', textAlign: 'center'}}>
+<figure style={{ margin: '2rem auto', textAlign: 'center' }}>
   <Image
     src={psemantica}
     alt="Diagrama de flujo de una búsqueda semántica"
@@ -163,7 +167,7 @@ La proximidad semántica es hoy la piedra angular de sistemas inteligentes que e
 
 # Fuentes y lecturas recomendadas
 
-- Mikolov et al. (2013). _Efficient Estimation of Word Representations in Vector Space._
+- Mikolov et al. (2013). *Efficient Estimation of Word Representations in Vector Space.*
 - [pgvector: vector similarity search for Postgres](https://github.com/pgvector/pgvector)
 - The Illustrated Word2Vec
 - Dromi, E. & Fishelzon, A. (1986). _Similarity, Specificity and Contrast

@@ -1,26 +1,21 @@
 :root {
-	--background: #0F1219;
-	--rgb-background: 15, 18, 25;
-	--font: #ffffff;
-	--rgb-font: 255, 255, 255;
-
-	--font-color-normal: #bdbdbd;
-	--font-color-highlight: antiquewhite;
-	--background: #393939;
-	--background-highlight: #2c2c2c;
-	--background-hover: #4a4a4a;
-	--boder-color: #666666;
-	--box-shadow: rgba(0, 0, 0, 0.3);
+	--font-color-normal: #94a3b8;
+	--font-color-highlight: #e2e8f0;
+	--background: #0f172a;
+	--background-highlight: #1e293b;
+	--background-hover: #334155;
+	--border-color: #475569;
+	--box-shadow: rgba(0, 0, 0, 0.4);
 }
 
 html[data-theme="light"] {
-	--font-color-normal: #333333;
-	--font-color-highlight: #222222;
-	--background: #f7f7f7;
+	--font-color-normal: #475569;
+	--font-color-highlight: #1e293b;
+	--background: #f8fafc;
 	--background-highlight: #ffffff;
-	--background-hover: #9a9a9a;
-	--border-color: #cccccc;
-	--box-shadow: rgba(0, 0, 0, 0.12);
+	--background-hover: #e2e8f0;
+	--border-color: #cbd5e1;
+	--box-shadow: rgba(0, 0, 0, 0.1);
 }
 
 @font-face {
@@ -46,7 +41,6 @@ body {
 	font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
       "Liberation Mono", "Courier New", monospace;
 	background-color: var(--background);
-	min-width: 1020;
 	width: min(90%, 1021px);
     margin: auto;
 	height: 100%;
@@ -60,8 +54,10 @@ main {
     border-radius: 9999px;
 }
 
-/* MD formar for post */
+/* MD format for post */
 .prose p img {
 	display: block;
 	margin: 1rem auto;
+	max-width: 100%;
+	height: auto;
 }

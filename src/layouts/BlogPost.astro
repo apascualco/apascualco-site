@@ -1,30 +1,41 @@
 ---
-import { Image } from "astro:assets";
-import type { CollectionEntry } from "astro:content";
-import BaseHead from "../components/BaseHead.astro";
-import Footer from "../components/Footer.astro";
-import FormattedDate from "../components/FormattedDate.astro";
-import Header from "../components/Header.astro";
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import Header from '../components/Header.astro';
+import StructuredData from '../components/StructuredData.astro';
+import { useTranslations } from '../i18n/translations';
 
-type Props = CollectionEntry<"blog">["data"];
+type Props = CollectionEntry<'blog'>['data'] & { readingTime?: number };
 
-const { title, description, pubDate, updatedDate, heroImage, lang } =
-  Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, lang, readingTime } = Astro.props;
+const t = useTranslations(lang);
 ---
 
-<html lang="en">
+<html lang={lang}>
   <head>
     <BaseHead title={title} description={description} />
+    <StructuredData
+      type="BlogPosting"
+      title={title}
+      description={description}
+      image={heroImage}
+      datePublished={pubDate}
+      dateModified={updatedDate}
+    />
   </head>
 
   <body>
     <Header lang={lang} />
-    <main>
+    <main id="main-content">
       <article>
+        <a href={`/${lang}/`} class="back-link">← {lang === 'es' ? 'Volver' : 'Back'}</a>
         <div class="hero-image">
           {
             heroImage && (
-              <Image width={1020} height={510} src={heroImage} alt="" />
+              <Image width={1020} height={510} src={heroImage} alt={`Hero image for ${title}`} />
             )
           }
         </div>
@@ -39,10 +50,11 @@ const { title, description, pubDate, updatedDate, heroImage, lang } =
             <div class="right">
               <div class="date">
                 <FormattedDate date={pubDate} />
+                {readingTime && <span class="reading-time">· {readingTime} min</span>}
                 {
                   updatedDate && (
                     <div class="last-updated-on">
-                      Last updated on <FormattedDate date={updatedDate} />
+                      {t('lastUpdatedOn')} <FormattedDate date={updatedDate} />
                     </div>
                   )
                 }
@@ -57,6 +69,25 @@ const { title, description, pubDate, updatedDate, heroImage, lang } =
       </article>
     </main>
     <Footer />
+    <button class="scroll-top" aria-label="Scroll to top">↑</button>
+    <script>
+      const scrollBtn = document.querySelector('.scroll-top');
+      const backLink = document.querySelector('.back-link');
+
+      function toggleScrollBtn() {
+        if (!backLink || !scrollBtn) return;
+        const backLinkRect = backLink.getBoundingClientRect();
+        const isBackLinkVisible = backLinkRect.bottom > 0;
+        scrollBtn.classList.toggle('visible', !isBackLinkVisible);
+      }
+
+      window.addEventListener('scroll', toggleScrollBtn, { passive: true });
+      toggleScrollBtn();
+
+      scrollBtn?.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    </script>
   </body>
 </html>
 <style>
@@ -65,21 +96,40 @@ const { title, description, pubDate, updatedDate, heroImage, lang } =
     max-width: 100%;
     margin: 0;
   }
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1rem;
+    color: var(--font-color-normal);
+    text-decoration: none;
+    font-size: 0.9em;
+    transition: color 0.15s ease;
+  }
+
+  .back-link:hover {
+    color: var(--font-color-highlight);
+  }
+
   .hero-image {
     width: 100%;
+    margin-bottom: 1.5rem;
   }
   .hero-image img {
     display: block;
     margin: 0 auto;
     border-radius: 12px;
     box-shadow: var(--box-shadow);
+    max-width: 100%;
+    height: auto;
   }
   .prose {
     width: 100%;
     color: rgb(var(--gray-dark));
   }
 
-  .prose p img {
+  .prose p img,
+  :global(.content img) {
+    max-width: 100%;
+    height: auto;
     margin: 1rem auto;
   }
 
@@ -89,7 +139,7 @@ const { title, description, pubDate, updatedDate, heroImage, lang } =
     align-items: center;
     gap: 1rem;
     padding-bottom: 1rem;
-    border-bottom: 1px solid var(--boder-color);
+    border-bottom: 1px solid var(--border-color);
   }
 
   .title .left {
@@ -106,6 +156,11 @@ const { title, description, pubDate, updatedDate, heroImage, lang } =
 
   .title .right {
     text-align: right;
+  }
+
+  .reading-time {
+    color: var(--font-color-normal);
+    opacity: 0.8;
   }
 
   .title .description {
@@ -189,5 +244,71 @@ const { title, description, pubDate, updatedDate, heroImage, lang } =
     padding: 0.15rem 0.35rem;
     border-radius: 6px;
     background: rgba(127, 127, 127, 0.12);
+  }
+
+  @media (max-width: 780px) {
+    .hero-image img {
+      border-radius: 8px;
+    }
+    .title h1 {
+      font-size: 1.3rem;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .title {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+    .title .right {
+      text-align: left;
+      width: 100%;
+    }
+    .title h1 {
+      font-size: 1.2rem;
+    }
+    .description .bullet {
+      font-size: 2em;
+    }
+    .description .text {
+      white-space: normal;
+      -webkit-line-clamp: 2;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+    }
+    .hero-image img {
+      border-radius: 6px;
+    }
+  }
+
+  .scroll-top {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+    background: var(--background-highlight);
+    color: var(--font-color-normal);
+    font-size: 1.2rem;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.2s ease,
+      visibility 0.2s ease,
+      background 0.15s ease;
+  }
+
+  .scroll-top.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .scroll-top:hover {
+    background: var(--background-hover);
+    color: var(--font-color-highlight);
   }
 </style>

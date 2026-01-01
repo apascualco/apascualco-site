@@ -1,0 +1,273 @@
+---
+import Layout from '../../layouts/AboutCV.astro';
+import Button from '../../components/Button.astro';
+import { aboutContent } from '../../i18n/about';
+import type { Lang } from '../../i18n/translations';
+
+export function getStaticPaths() {
+  return [{ params: { lang: 'es' } }, { params: { lang: 'en' } }];
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const content = aboutContent[lang];
+
+const description =
+  lang === 'es'
+    ? 'Senior Backend Engineer con más de 10 años de experiencia'
+    : 'Senior Backend Engineer with 10+ years of experience';
+---
+
+<Layout title={content.title} description={description} lang={lang}>
+  <section class="cv-about">
+    {content.intro.map((p) => <p set:html={p} />)}
+  </section>
+  <div class="cv-download-top">
+    <Button href="/download/resume.pdf" class="about-cta">{content.downloadCV}</Button>
+  </div>
+  <section class="timeline">
+    {
+      content.timeline.map((item) => (
+        <div class={`timeline-item ${item.position}`}>
+          <span class="date">{item.date}</span>
+          <div class="content">
+            <h3>{item.company}</h3>
+            <p>{item.description}</p>
+          </div>
+        </div>
+      ))
+    }
+  </section>
+  <div class="cv-download-bottom">
+    <Button href="/download/resume.pdf" class="about-cta">{content.downloadCV}</Button>
+  </div>
+  <section class="languages">
+    <h2>{content.languagesTitle}</h2>
+    <ul>
+      {
+        content.languages.map((l) => (
+          <li>
+            <b>{l.name}:</b> {l.level}
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+  <section class="education">
+    <h2>{content.educationTitle}</h2>
+    {
+      content.education.map((edu) => (
+        <div class="edu-item">
+          <h3>{edu.institution}</h3>
+          <span class="date">{edu.date}</span>
+          <p>{edu.description}</p>
+        </div>
+      ))
+    }
+  </section>
+
+  <style>
+    .cv-about {
+      border-bottom: 2px solid #444;
+    }
+
+    .cv-about b {
+      color: var(--font-color-normal);
+    }
+    .timeline {
+      position: relative;
+      margin: 0 auto;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 3px;
+      background: var(--border-color);
+      transform: translateX(-50%);
+    }
+
+    .timeline-item {
+      position: relative;
+      width: calc(50% - 44px);
+      padding: 1rem 1.25rem;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      top: 1.2rem;
+      width: 16px;
+      height: 16px;
+      background: var(--background);
+      border: 3px solid var(--border-color);
+      border-radius: 50%;
+      z-index: 1;
+    }
+
+    .timeline-item.left {
+      text-align: right;
+      left: 0;
+      padding-left: 0;
+    }
+
+    .timeline-item.left p {
+      left: 0;
+      text-align: left;
+    }
+
+    .timeline-item.left::before {
+      right: -35px;
+    }
+
+    .timeline-item.right {
+      left: calc(50% + 24px);
+      padding-right: 0;
+    }
+
+    .timeline-item.right::before {
+      left: -35px;
+    }
+
+    .content {
+      background: var(--background-highlight);
+      color: var(--font-color-normal);
+      padding: 0.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px var(--box-shadow);
+      font-size: 0.8rem;
+    }
+
+    .content h3 {
+      margin: 0;
+    }
+
+    .left {
+      margin: 0;
+    }
+
+    .date {
+      font-size: 0.85rem;
+      color: var(--font-color-normal);
+      display: block;
+      margin-bottom: 0.5rem;
+      margin-top: 0.4rem;
+    }
+
+    .timeline-item:hover .content {
+      background-color: var(--background-hover);
+    }
+    .timeline-item:hover::before {
+      background: var(--background-hover);
+    }
+
+    .cv-download-top {
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    .cv-download-bottom {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .education,
+    .languages {
+      color: var(--font-color-normal);
+    }
+
+    .education h2,
+    .languages h2 {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 0.3rem;
+      padding-top: 3rem;
+    }
+
+    .edu-item {
+      margin-bottom: 1.2rem;
+    }
+
+    .edu-item p {
+      font-size: 0.8rem;
+    }
+
+    .edu-item h3 {
+      margin: 0;
+      font-size: 1rem;
+      color: var(--font-color-highlight);
+    }
+
+    .edu-item .date {
+      font-size: 0.85rem;
+      color: var(--font-color-normal);
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    .languages ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .languages li {
+      margin-bottom: 0.5rem;
+      color: var(--font-color-normal);
+    }
+    .languages li b {
+      color: var(--font-color-highlight);
+    }
+
+    @media (max-width: 560px) {
+      .timeline::before {
+        left: 8px;
+      }
+
+      .timeline-item {
+        width: calc(100% - 30px);
+        padding-left: 0;
+        padding-right: 1rem;
+      }
+
+      .timeline-item.left,
+      .timeline-item.right {
+        left: 30px;
+        text-align: left;
+      }
+
+      .timeline-item.left::before,
+      .timeline-item.right::before {
+        left: -30px;
+        right: auto;
+      }
+
+      .timeline-item.left p,
+      .timeline-item.right p {
+        text-align: left;
+      }
+
+      .content {
+        font-size: 0.75rem;
+      }
+
+      .date {
+        font-size: 0.8rem;
+      }
+
+      .cv-download-top,
+      .cv-download-bottom {
+        text-align: left;
+      }
+
+      .cv-download-top :global(a),
+      .cv-download-bottom :global(a) {
+        min-height: auto;
+        padding: 0.3rem 0.7rem;
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</Layout>

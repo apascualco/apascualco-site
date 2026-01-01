@@ -1,21 +1,28 @@
 ---
-import type { CollectionEntry } from "astro:content";
-import BaseHead from "../components/BaseHead.astro";
-import Footer from "../components/Footer.astro";
-import Header from "../components/Header.astro";
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import type { Lang } from '../i18n/translations';
 
-const { title } = Astro.props;
+interface Props {
+  title: string;
+  description: string;
+  lang: Lang;
+}
+
+const { title, description, lang } = Astro.props;
 ---
 
-<html lang="en">
+<html lang={lang}>
   <head>
-    <BaseHead title={title} description="DE" />
+    <BaseHead title={title} description={description} />
   </head>
 
   <body>
-    <Header />
-    <main>
+    <Header lang={lang} />
+    <main id="main-content">
       <article>
+        <a href={`/${lang}/`} class="back-link">← {lang === 'es' ? 'Volver' : 'Back'}</a>
         <div class="prose">
           <div class="title">
             <h1>{title}</h1>
@@ -26,7 +33,69 @@ const { title } = Astro.props;
       </article>
     </main>
     <Footer />
+    <button class="scroll-top" aria-label="Scroll to top">↑</button>
+    <script>
+      const scrollBtn = document.querySelector('.scroll-top');
+      const backLink = document.querySelector('.back-link');
+
+      function toggleScrollBtn() {
+        if (!backLink || !scrollBtn) return;
+        const backLinkRect = backLink.getBoundingClientRect();
+        const isBackLinkVisible = backLinkRect.bottom > 0;
+        scrollBtn.classList.toggle('visible', !isBackLinkVisible);
+      }
+
+      window.addEventListener('scroll', toggleScrollBtn, { passive: true });
+      toggleScrollBtn();
+
+      scrollBtn?.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    </script>
   </body>
 </html>
 
-<style></style>
+<style>
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1rem;
+    color: var(--font-color-normal);
+    text-decoration: none;
+    font-size: 0.9em;
+    transition: color 0.15s ease;
+  }
+
+  .back-link:hover {
+    color: var(--font-color-highlight);
+  }
+
+  .scroll-top {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+    background: var(--background-highlight);
+    color: var(--font-color-normal);
+    font-size: 1.2rem;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.2s ease,
+      visibility 0.2s ease,
+      background 0.15s ease;
+  }
+
+  .scroll-top.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .scroll-top:hover {
+    background: var(--background-hover);
+    color: var(--font-color-highlight);
+  }
+</style>

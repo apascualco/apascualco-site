@@ -1,14 +1,15 @@
 ---
-import type { CollectionEntry } from "astro:content";
+import type { CollectionEntry } from 'astro:content';
+import { calculateReadingTime } from '../utils/readingTime';
 
 export interface Props {
-  posts: CollectionEntry<"blog">[];
-  lang: "es" | "en";
+  posts: CollectionEntry<'blog'>[];
+  lang: 'es' | 'en';
 }
 
 const { posts, lang } = Astro.props;
 
-function groupPostsByYear(posts: CollectionEntry<"blog">[]) {
+function groupPostsByYear(posts: CollectionEntry<'blog'>[]) {
   return posts.reduce(
     (acc, post) => {
       const year = new Date(post.data.pubDate).getFullYear();
@@ -16,145 +17,149 @@ function groupPostsByYear(posts: CollectionEntry<"blog">[]) {
       acc[year].push(post);
       return acc;
     },
-    {} as Record<number, CollectionEntry<"blog">[]>
+    {} as Record<number, CollectionEntry<'blog'>[]>
   );
 }
 
 const groupedPosts = groupPostsByYear(
-  posts
-    .filter((post) => !post.data.draft)
-    .filter((post) => post.data.lang === lang)
+  posts.filter((post) => !post.data.draft).filter((post) => post.data.lang === lang)
 );
 ---
 
-<section>
-  <div class="post-table">
-    <div class="table-header">
-      <span class="col-date"></span>
-      <span class="col-title">título</span>
-      <span class="col-subtitulo">subtitulo</span>
-      <span class="col-tag">tag</span>
-    </div>
-
-    {
-      Object.entries(groupedPosts)
-        .sort((a, b) => Number(b[0]) - Number(a[0]))
-        .map(([year, posts]) =>
-          posts.map((post, idx) => (
-            <a href={`/blog/${post.id}`} class="table-row">
-              <span class="col-date">{idx === 0 ? year : ""}</span>
-              <span class="col-title">{post.data.title}</span>
-              <span class="col-subtitle">- {post.data.description}</span>
-              <span class="col-topic">{post.data.topic ?? "—"}</span>
-            </a>
-          ))
-        )
-    }
-  </div>
+<section class="timeline">
+  {
+    Object.entries(groupedPosts)
+      .sort((a, b) => Number(b[0]) - Number(a[0]))
+      .map(([year, posts]) => (
+        <div class="year-group">
+          <div class="year-marker">
+            <span class="dot" />
+            <span class="year">{year}</span>
+          </div>
+          <div class="posts-list">
+            {posts.map((post) => {
+              const readingTime = calculateReadingTime(post.body ?? '');
+              return (
+                <a href={`/${lang}/blog/${post.id}`} class="post-item">
+                  <span class="post-title">{post.data.title}</span>
+                  <span class="post-description">{post.data.description}</span>
+                  <span class="post-time">☕ {readingTime} min read</span>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      ))
+  }
 </section>
 
 <style>
-  section {
-    font-size: 14px;
+  .timeline {
+    position: relative;
+    padding-left: 24px;
   }
 
-  .post-table {
-    width: 100%;
-    color: var(--font-color-normal);
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 12px;
+    bottom: 0;
+    width: 1px;
+    background: var(--border-color);
   }
 
-  .table-header {
-    display: grid;
-    grid-template-columns: 50px 120px 3fr 1fr;
+  .year-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+  }
+
+  .year-group:last-child {
+    margin-bottom: 0;
+  }
+
+  .year-marker {
+    display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 6px 0 10px 0;
-    color: var(--font-color-normal);
-    border-bottom: 1px solid var(--border-color);
-    text-transform: lowercase;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
   }
 
-  .table-row {
-    display: grid;
-    grid-template-columns: 50px 120px 3fr 1fr;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 15px 0;
-    border-top: 1px solid var(--boder-color);
-    transition: background-color 0.15s ease;
+  .dot {
+    position: absolute;
+    left: -24px;
+    width: 11px;
+    height: 11px;
+    background: var(--background);
+    border: 2px solid var(--border-color);
+    border-radius: 50%;
+  }
 
+  .year {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: var(--font-color-highlight);
+  }
+
+  .posts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .post-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.75rem;
+    margin-left: -0.75rem;
+    border-radius: 8px;
     text-decoration: none;
     color: inherit;
+    transition: background 0.15s ease;
   }
 
-  .table-row:last-child {
-    border-bottom: 1px solid var(--boder-color);
-  }
-
-  .table-row:hover {
+  .post-item:hover {
     background: var(--background-hover);
   }
 
   .post-title {
-    text-decoration: none;
-    color: inherit;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    color: var(--font-color-highlight);
+    font-weight: 500;
   }
 
-  .col-date {
-    text-align: center;
-  }
-
-  .col-date-string {
+  .post-description {
+    font-size: 0.85em;
     color: var(--font-color-normal);
-  }
-
-  .col-topic {
-    color: var(--font-color-normal);
-  }
-
-  .col-title,
-  .col-subtitle {
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
+    -webkit-line-clamp: 2;
     overflow: hidden;
   }
 
-  .table-row[data-indented="true"] {
-    grid-template-columns: 0px 1fr 140px 90px;
-    padding-left: 56px;
-  }
-
-  .table-row[data-indented="true"] .col-date {
-    display: none;
-  }
-
-  @media (max-width: 780px) {
-    .table-header,
-    .table-row {
-      grid-template-columns: 50px 1fr 130px 80px;
-    }
-    .table-row > * {
-      min-width: 0;
-    }
-    .table-row[data-indented="true"] {
-      padding-left: 50px;
-    }
+  .post-time {
+    font-size: 0.75em;
+    color: var(--font-color-normal);
+    opacity: 0.7;
   }
 
   @media (max-width: 560px) {
-    .table-header,
-    .table-row {
-      grid-template-columns: 50px 1fr 90px;
+    .timeline {
+      padding-left: 20px;
     }
-    .col-topic {
-      display: none;
+
+    .dot {
+      left: -20px;
+      width: 9px;
+      height: 9px;
     }
-    .table-row[data-indented="true"] {
-      grid-template-columns: 0px 1fr 90px;
+
+    .timeline::before {
+      left: 4px;
+    }
+
+    .post-description {
+      -webkit-line-clamp: 1;
     }
   }
 </style>

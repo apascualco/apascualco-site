@@ -1,0 +1,57 @@
+---
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  type: 'WebSite' | 'Person' | 'BlogPosting';
+  title?: string;
+  description?: string;
+  image?: ImageMetadata;
+  datePublished?: Date;
+  dateModified?: Date;
+}
+
+const { type, title, description, image, datePublished, dateModified } = Astro.props;
+
+const siteUrl = Astro.site?.toString() || 'https://www.apascualco.com';
+
+const schemas: Record<string, object> = {
+  WebSite: {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Alberto Pascual Corpas',
+    url: siteUrl,
+    description: 'Senior Backend Engineer | Backend & Cloud Architecture',
+    inLanguage: ['es', 'en'],
+  },
+  Person: {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: 'Alberto Pascual Corpas',
+    url: siteUrl,
+    jobTitle: 'Senior Backend Engineer',
+    sameAs: ['https://www.linkedin.com/in/apascualco', 'https://github.com/apascualco'],
+  },
+  BlogPosting: {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: title,
+    description: description,
+    image: image ? new URL(image.src, siteUrl).toString() : undefined,
+    datePublished: datePublished?.toISOString(),
+    dateModified: dateModified?.toISOString() || datePublished?.toISOString(),
+    author: {
+      '@type': 'Person',
+      name: 'Alberto Pascual Corpas',
+      url: siteUrl,
+    },
+    publisher: {
+      '@type': 'Person',
+      name: 'Alberto Pascual Corpas',
+    },
+  },
+};
+
+const schema = schemas[type];
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />
