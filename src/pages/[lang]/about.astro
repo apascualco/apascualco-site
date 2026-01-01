@@ -91,7 +91,7 @@ const description =
 
     .timeline-item {
       position: relative;
-      width: 405px;
+      width: calc(50% - 44px);
       padding: 1rem 1.25rem;
     }
 
@@ -110,6 +110,7 @@ const description =
     .timeline-item.left {
       text-align: right;
       left: 0;
+      padding-left: 0;
     }
 
     .timeline-item.left p {
@@ -118,15 +119,16 @@ const description =
     }
 
     .timeline-item.left::before {
-      right: -11px;
+      right: -35px;
     }
 
     .timeline-item.right {
-      left: 50%;
+      left: calc(50% + 24px);
+      padding-right: 0;
     }
 
     .timeline-item.right::before {
-      left: -11px;
+      left: -35px;
     }
 
     .content {
@@ -217,6 +219,43 @@ const description =
     }
     .languages li b {
       color: var(--font-color-highlight);
+    }
+
+    @media (max-width: 560px) {
+      .timeline::before {
+        left: 8px;
+      }
+
+      .timeline-item {
+        width: calc(100% - 30px);
+        padding-left: 0;
+        padding-right: 1rem;
+      }
+
+      .timeline-item.left,
+      .timeline-item.right {
+        left: 30px;
+        text-align: left;
+      }
+
+      .timeline-item.left::before,
+      .timeline-item.right::before {
+        left: -30px;
+        right: auto;
+      }
+
+      .timeline-item.left p,
+      .timeline-item.right p {
+        text-align: left;
+      }
+
+      .content {
+        font-size: 0.75rem;
+      }
+
+      .date {
+        font-size: 0.8rem;
+      }
     }
   </style>
 </Layout>
