@@ -69,6 +69,25 @@ const t = useTranslations(lang);
       </article>
     </main>
     <Footer />
+    <button class="scroll-top" aria-label="Scroll to top">↑</button>
+    <script>
+      const scrollBtn = document.querySelector('.scroll-top');
+      const backLink = document.querySelector('.back-link');
+
+      function toggleScrollBtn() {
+        if (!backLink || !scrollBtn) return;
+        const backLinkRect = backLink.getBoundingClientRect();
+        const isBackLinkVisible = backLinkRect.bottom > 0;
+        scrollBtn.classList.toggle('visible', !isBackLinkVisible);
+      }
+
+      window.addEventListener('scroll', toggleScrollBtn, { passive: true });
+      toggleScrollBtn();
+
+      scrollBtn?.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    </script>
   </body>
 </html>
 <style>
@@ -261,5 +280,35 @@ const t = useTranslations(lang);
     .hero-image img {
       border-radius: 6px;
     }
+  }
+
+  .scroll-top {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+    background: var(--background-highlight);
+    color: var(--font-color-normal);
+    font-size: 1.2rem;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.2s ease,
+      visibility 0.2s ease,
+      background 0.15s ease;
+  }
+
+  .scroll-top.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .scroll-top:hover {
+    background: var(--background-hover);
+    color: var(--font-color-highlight);
   }
 </style>
