@@ -206,4 +206,40 @@ const t = useTranslations(lang);
     border-radius: 6px;
     background: rgba(127, 127, 127, 0.12);
   }
+
+  @media (max-width: 780px) {
+    .hero-image img {
+      border-radius: 8px;
+    }
+    .title h1 {
+      font-size: 1.3rem;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .title {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+    .title .right {
+      text-align: left;
+      width: 100%;
+    }
+    .title h1 {
+      font-size: 1.2rem;
+    }
+    .description .bullet {
+      font-size: 2em;
+    }
+    .description .text {
+      white-space: normal;
+      -webkit-line-clamp: 2;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+    }
+    .hero-image img {
+      border-radius: 6px;
+    }
+  }
 </style>
