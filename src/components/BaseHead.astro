@@ -1,10 +1,10 @@
 ---
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseHead /> component.
-import "../styles/global.css";
-import type { ImageMetadata } from "astro";
-import FallbackImage from "../assets/blog-placeholder-1.jpg";
-import { SITE_TITLE } from "../consts";
+import '../styles/global.css';
+import type { ImageMetadata } from 'astro';
+import FallbackImage from '../assets/blog-placeholder-1.jpg';
+import { SITE_TITLE } from '../consts';
 
 interface Props {
   title: string;
@@ -15,6 +15,17 @@ interface Props {
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 const { title, description, image = FallbackImage } = Astro.props;
+
+// Generate hreflang URLs
+const pathname = Astro.url.pathname;
+const getAlternateUrl = (targetLang: string) => {
+  if (pathname.startsWith('/es/')) {
+    return new URL(pathname.replace('/es/', `/${targetLang}/`), Astro.site);
+  } else if (pathname.startsWith('/en/')) {
+    return new URL(pathname.replace('/en/', `/${targetLang}/`), Astro.site);
+  }
+  return new URL(`/${targetLang}/`, Astro.site);
+};
 ---
 
 <!-- Global Metadata -->
@@ -26,26 +37,13 @@ const { title, description, image = FallbackImage } = Astro.props;
   rel="alternate"
   type="application/rss+xml"
   title={SITE_TITLE}
-  href={new URL("rss.xml", Astro.site)}
+  href={new URL('rss.xml', Astro.site)}
 />
 <meta name="generator" content={Astro.generator} />
 
 <!-- Font preloads -->
-<link
-  rel="preload"
-  href="/fonts/atkinson-regular.woff"
-  }
-  as="font"
-  type="font/woff"
-  crossorigin
-/>
-<link
-  rel="preload"
-  href="/fonts/atkinson-bold.woff"
-  as="font"
-  type="font/woff"
-  crossorigin
-/>
+<link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin />
+<link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link
@@ -55,6 +53,11 @@ const { title, description, image = FallbackImage } = Astro.props;
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
+
+<!-- Hreflang for internationalization -->
+<link rel="alternate" hreflang="es" href={getAlternateUrl('es')} />
+<link rel="alternate" hreflang="en" href={getAlternateUrl('en')} />
+<link rel="alternate" hreflang="x-default" href={getAlternateUrl('es')} />
 
 <!-- Primary Meta Tags -->
 <title>{title}</title>
@@ -77,12 +80,14 @@ const { title, description, image = FallbackImage } = Astro.props;
 <script is:inline>
   (function () {
     try {
-      var lang = localStorage.getItem("lang") || "es";
-      var root = document.documentElement;
-      root.setAttribute("lang", lang);
-      root.setAttribute("data-lang", lang);
-      root.classList.add("pre-lang");
-    } catch (e) {}
+      const lang = localStorage.getItem('lang') || 'es';
+      const root = document.documentElement;
+      root.setAttribute('lang', lang);
+      root.setAttribute('data-lang', lang);
+      root.classList.add('pre-lang');
+    } catch {
+      // Ignore localStorage errors
+    }
   })();
 </script>
 <style is:global>
