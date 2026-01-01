@@ -54,8 +54,10 @@ main {
     border-radius: 9999px;
 }
 
-/* MD formar for post */
+/* MD format for post */
 .prose p img {
 	display: block;
 	margin: 1rem auto;
+	max-width: 100%;
+	height: auto;
 }
