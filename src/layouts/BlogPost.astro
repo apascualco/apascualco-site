@@ -8,9 +8,9 @@ import Header from '../components/Header.astro';
 import StructuredData from '../components/StructuredData.astro';
 import { useTranslations } from '../i18n/translations';
 
-type Props = CollectionEntry<'blog'>['data'];
+type Props = CollectionEntry<'blog'>['data'] & { readingTime?: number };
 
-const { title, description, pubDate, updatedDate, heroImage, lang } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, lang, readingTime } = Astro.props;
 const t = useTranslations(lang);
 ---
 
@@ -49,6 +49,7 @@ const t = useTranslations(lang);
             <div class="right">
               <div class="date">
                 <FormattedDate date={pubDate} />
+                {readingTime && <span class="reading-time">· {readingTime} min</span>}
                 {
                   updatedDate && (
                     <div class="last-updated-on">
@@ -116,6 +117,11 @@ const t = useTranslations(lang);
 
   .title .right {
     text-align: right;
+  }
+
+  .reading-time {
+    color: var(--font-color-normal);
+    opacity: 0.8;
   }
 
   .title .description {

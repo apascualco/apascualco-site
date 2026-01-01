@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { useTranslations } from '../i18n/translations';
+import { calculateReadingTime } from '../utils/readingTime';
 
 export interface Props {
   posts: CollectionEntry<'blog'>[];
@@ -33,21 +34,24 @@ const groupedPosts = groupPostsByYear(
       <span class="col-date"></span>
       <span class="col-title">{t('tableTitle')}</span>
       <span class="col-subtitulo">{t('tableSubtitle')}</span>
-      <span class="col-tag">{t('tableTag')}</span>
+      <span class="col-time"></span>
     </div>
 
     {
       Object.entries(groupedPosts)
         .sort((a, b) => Number(b[0]) - Number(a[0]))
         .map(([year, posts]) =>
-          posts.map((post, idx) => (
-            <a href={`/${lang}/blog/${post.id}`} class="table-row">
-              <span class="col-date">{idx === 0 ? year : ''}</span>
-              <span class="col-title">{post.data.title}</span>
-              <span class="col-subtitle">- {post.data.description}</span>
-              <span class="col-topic">{post.data.topic ?? '—'}</span>
-            </a>
-          ))
+          posts.map((post, idx) => {
+            const readingTime = calculateReadingTime(post.body ?? '');
+            return (
+              <a href={`/${lang}/blog/${post.id}`} class="table-row">
+                <span class="col-date">{idx === 0 ? year : ''}</span>
+                <span class="col-title">{post.data.title}</span>
+                <span class="col-subtitle">- {post.data.description}</span>
+                <span class="col-time">{readingTime} min</span>
+              </a>
+            );
+          })
         )
     }
   </div>
@@ -65,7 +69,7 @@ const groupedPosts = groupPostsByYear(
 
   .table-header {
     display: grid;
-    grid-template-columns: 50px 120px 3fr 1fr;
+    grid-template-columns: 50px 120px 3fr 60px;
     align-items: center;
     gap: 0.5rem;
     padding: 6px 0 10px 0;
@@ -76,7 +80,7 @@ const groupedPosts = groupPostsByYear(
 
   .table-row {
     display: grid;
-    grid-template-columns: 50px 120px 3fr 1fr;
+    grid-template-columns: 50px 120px 3fr 60px;
     align-items: center;
     gap: 0.5rem;
     padding: 15px 0;
@@ -111,8 +115,10 @@ const groupedPosts = groupPostsByYear(
     color: var(--font-color-normal);
   }
 
-  .col-topic {
+  .col-time {
     color: var(--font-color-normal);
+    text-align: right;
+    font-size: 0.85em;
   }
 
   .col-title,
@@ -135,7 +141,7 @@ const groupedPosts = groupPostsByYear(
   @media (max-width: 780px) {
     .table-header,
     .table-row {
-      grid-template-columns: 50px 1fr 130px 80px;
+      grid-template-columns: 50px 1fr 130px 55px;
     }
     .table-row > * {
       min-width: 0;
@@ -148,13 +154,13 @@ const groupedPosts = groupPostsByYear(
   @media (max-width: 560px) {
     .table-header,
     .table-row {
-      grid-template-columns: 50px 1fr 90px;
+      grid-template-columns: 50px 1fr 50px;
     }
-    .col-topic {
+    .col-subtitle {
       display: none;
     }
     .table-row[data-indented='true'] {
-      grid-template-columns: 0px 1fr 90px;
+      grid-template-columns: 0px 1fr 50px;
     }
   }
 </style>
