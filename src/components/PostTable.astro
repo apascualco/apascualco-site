@@ -1,14 +1,16 @@
 ---
-import type { CollectionEntry } from "astro:content";
+import type { CollectionEntry } from 'astro:content';
+import { useTranslations } from '../i18n/translations';
 
 export interface Props {
-  posts: CollectionEntry<"blog">[];
-  lang: "es" | "en";
+  posts: CollectionEntry<'blog'>[];
+  lang: 'es' | 'en';
 }
 
 const { posts, lang } = Astro.props;
+const t = useTranslations(lang);
 
-function groupPostsByYear(posts: CollectionEntry<"blog">[]) {
+function groupPostsByYear(posts: CollectionEntry<'blog'>[]) {
   return posts.reduce(
     (acc, post) => {
       const year = new Date(post.data.pubDate).getFullYear();
@@ -16,14 +18,12 @@ function groupPostsByYear(posts: CollectionEntry<"blog">[]) {
       acc[year].push(post);
       return acc;
     },
-    {} as Record<number, CollectionEntry<"blog">[]>
+    {} as Record<number, CollectionEntry<'blog'>[]>
   );
 }
 
 const groupedPosts = groupPostsByYear(
-  posts
-    .filter((post) => !post.data.draft)
-    .filter((post) => post.data.lang === lang)
+  posts.filter((post) => !post.data.draft).filter((post) => post.data.lang === lang)
 );
 ---
 
@@ -31,9 +31,9 @@ const groupedPosts = groupPostsByYear(
   <div class="post-table">
     <div class="table-header">
       <span class="col-date"></span>
-      <span class="col-title">título</span>
-      <span class="col-subtitulo">subtitulo</span>
-      <span class="col-tag">tag</span>
+      <span class="col-title">{t('tableTitle')}</span>
+      <span class="col-subtitulo">{t('tableSubtitle')}</span>
+      <span class="col-tag">{t('tableTag')}</span>
     </div>
 
     {
@@ -42,10 +42,10 @@ const groupedPosts = groupPostsByYear(
         .map(([year, posts]) =>
           posts.map((post, idx) => (
             <a href={`/blog/${post.id}`} class="table-row">
-              <span class="col-date">{idx === 0 ? year : ""}</span>
+              <span class="col-date">{idx === 0 ? year : ''}</span>
               <span class="col-title">{post.data.title}</span>
               <span class="col-subtitle">- {post.data.description}</span>
-              <span class="col-topic">{post.data.topic ?? "—"}</span>
+              <span class="col-topic">{post.data.topic ?? '—'}</span>
             </a>
           ))
         )
@@ -123,12 +123,12 @@ const groupedPosts = groupPostsByYear(
     overflow: hidden;
   }
 
-  .table-row[data-indented="true"] {
+  .table-row[data-indented='true'] {
     grid-template-columns: 0px 1fr 140px 90px;
     padding-left: 56px;
   }
 
-  .table-row[data-indented="true"] .col-date {
+  .table-row[data-indented='true'] .col-date {
     display: none;
   }
 
@@ -140,7 +140,7 @@ const groupedPosts = groupPostsByYear(
     .table-row > * {
       min-width: 0;
     }
-    .table-row[data-indented="true"] {
+    .table-row[data-indented='true'] {
       padding-left: 50px;
     }
   }
@@ -153,7 +153,7 @@ const groupedPosts = groupPostsByYear(
     .col-topic {
       display: none;
     }
-    .table-row[data-indented="true"] {
+    .table-row[data-indented='true'] {
       grid-template-columns: 0px 1fr 90px;
     }
   }

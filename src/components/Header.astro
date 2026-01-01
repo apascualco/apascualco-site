@@ -8,6 +8,7 @@ import { SITE_TITLE } from '../consts';
 import Button from './Button.astro';
 import ThemeToggle from './ThemeToggle.astro';
 import LanguageToggle from './LanguageToggle.astro';
+import { useTranslations } from '../i18n/translations';
 
 export interface Props {
   lang: 'es' | 'en';
@@ -16,6 +17,7 @@ export interface Props {
 const { lang } = Astro.props;
 
 const safeLang: 'es' | 'en' = lang === 'en' ? 'en' : 'es';
+const t = useTranslations(safeLang);
 
 const subtitle =
   safeLang === 'es'
@@ -24,7 +26,7 @@ const subtitle =
 ---
 
 <a href="#main-content" class="skip-link">
-  {safeLang === 'es' ? 'Saltar al contenido' : 'Skip to content'}
+  {t('skipToContent')}
 </a>
 <header>
   <div class="header-grid">
@@ -43,7 +45,7 @@ const subtitle =
     </div>
   </div>
   <nav>
-    <Button href=`/${lang}/about` class="header-button">About & CV</Button>
+    <Button href={`/${lang}/about`} class="header-button">{t('aboutAndCV')}</Button>
     <div class="header-social-config">
       <a href="https://www.linkedin.com/in/apascualco/" target="_blank" rel="noopener noreferrer">
         <Image width={33} height={33} src={linkedinICO} alt="Linkedin" class="linkedin-icon" /></a
