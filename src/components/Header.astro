@@ -1,28 +1,31 @@
 ---
-import { Image } from "astro:assets";
-import avatar from "../assets/header/photo-60.webp";
-import linkedinICO from "../assets/header/linkedin-50.svg";
-import substackICO from "../assets/header/substack-50.svg";
-import githubICO from "../assets/header/github-48.svg";
-import { SITE_TITLE } from "../consts";
-import Button from "./Button.astro";
-import ThemeToggle from "./ThemeToggle.astro";
-import LanguageToggle from "./LanguageToggle.astro";
+import { Image } from 'astro:assets';
+import avatar from '../assets/header/photo-60.webp';
+import linkedinICO from '../assets/header/linkedin-50.svg';
+import substackICO from '../assets/header/substack-50.svg';
+import githubICO from '../assets/header/github-48.svg';
+import { SITE_TITLE } from '../consts';
+import Button from './Button.astro';
+import ThemeToggle from './ThemeToggle.astro';
+import LanguageToggle from './LanguageToggle.astro';
 
 export interface Props {
-  lang: "es" | "en";
+  lang: 'es' | 'en';
 }
 
 const { lang } = Astro.props;
 
-const safeLang: "es" | "en" = lang === "en" ? "en" : "es";
+const safeLang: 'es' | 'en' = lang === 'en' ? 'en' : 'es';
 
 const subtitle =
-  safeLang === "es"
-    ? "SSE · Más de 11 años construyendo software escalable"
-    : "SSE · 11+ years building scalable software solutions";
+  safeLang === 'es'
+    ? 'SSE · Más de 11 años construyendo software escalable'
+    : 'SSE · 11+ years building scalable software solutions';
 ---
 
+<a href="#main-content" class="skip-link">
+  {safeLang === 'es' ? 'Saltar al contenido' : 'Skip to content'}
+</a>
 <header>
   <div class="header-grid">
     <div>
@@ -42,44 +45,14 @@ const subtitle =
   <nav>
     <Button href=`/${lang}/about` class="header-button">About & CV</Button>
     <div class="header-social-config">
-      <a
-        href="https://www.linkedin.com/in/apascualco/"
-        target="_blank"
-        rel="noopener noreferrer"
+      <a href="https://www.linkedin.com/in/apascualco/" target="_blank" rel="noopener noreferrer">
+        <Image width={33} height={33} src={linkedinICO} alt="Linkedin" class="linkedin-icon" /></a
       >
-        <Image
-          width={33}
-          height={33}
-          src={linkedinICO}
-          alt="Linkedin"
-          class="linkedin-icon"
-        /></a
+      <a href="https://apascualco.substack.com" target="_blank" rel="noopener noreferrer">
+        <Image width={33} height={33} src={substackICO} alt="Substack" class="substack-icon" /></a
       >
-      <a
-        href="https://apascualco.substack.com"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <Image
-          width={33}
-          height={33}
-          src={substackICO}
-          alt="Substack"
-          class="substack-icon"
-        /></a
-      >
-      <a
-        href="https://github.com/apascualco/"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <Image
-          width={33}
-          height={33}
-          src={githubICO}
-          alt="github"
-          class="github-icon"
-        /></a
+      <a href="https://github.com/apascualco/" target="_blank" rel="noopener noreferrer">
+        <Image width={33} height={33} src={githubICO} alt="github" class="github-icon" /></a
       >
       <ThemeToggle />
       <LanguageToggle />
@@ -153,5 +126,21 @@ const subtitle =
     align-items: center;
     justify-content: center;
     line-height: 1;
+  }
+
+  .skip-link {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    background: var(--font-color-highlight);
+    color: var(--background);
+    padding: 0.5rem 1rem;
+    z-index: 100;
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  .skip-link:focus {
+    top: 0;
   }
 </style>
