@@ -31,6 +31,7 @@ const t = useTranslations(lang);
     <Header lang={lang} />
     <main id="main-content">
       <article>
+        <a href={`/${lang}/`} class="back-link">← {lang === 'es' ? 'Volver' : 'Back'}</a>
         <div class="hero-image">
           {
             heroImage && (
@@ -76,6 +77,19 @@ const t = useTranslations(lang);
     max-width: 100%;
     margin: 0;
   }
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1rem;
+    color: var(--font-color-normal);
+    text-decoration: none;
+    font-size: 0.9em;
+    transition: color 0.15s ease;
+  }
+
+  .back-link:hover {
+    color: var(--font-color-highlight);
+  }
+
   .hero-image {
     width: 100%;
   }
