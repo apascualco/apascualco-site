@@ -11,4 +11,7 @@ export default defineConfig({
   image: {
     experimentalLayout: 'responsive',
   },
+  prefetch: {
+    prefetchAll: true,
+  },
 });
