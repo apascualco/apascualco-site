@@ -45,7 +45,11 @@ const subtitle =
     </div>
   </div>
   <nav>
-    <div class="header-social-config">
+    <div class="config-controls">
+      <LanguageToggle />
+      <ThemeToggle />
+    </div>
+    <div class="social-links">
       <a href="https://www.linkedin.com/in/apascualco/" target="_blank" rel="noopener noreferrer">
         <Image width={33} height={33} src={linkedinICO} alt="Linkedin" class="social-icon" /></a
       >
@@ -55,8 +59,6 @@ const subtitle =
       <a href="https://github.com/apascualco/" target="_blank" rel="noopener noreferrer">
         <Image width={33} height={33} src={githubICO} alt="github" class="social-icon" /></a
       >
-      <ThemeToggle />
-      <LanguageToggle />
     </div>
   </nav>
 </header>
@@ -123,13 +125,14 @@ const subtitle =
   .about-link:hover {
     background: var(--background-hover);
   }
-  .header-social-config {
+  .social-links,
+  .config-controls {
     display: flex;
     align-items: center;
     gap: 0.5rem;
   }
 
-  .header-social-config a {
+  .social-links a {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -180,7 +183,8 @@ const subtitle =
       margin-bottom: 1rem;
       gap: 0.5rem;
     }
-    .header-social-config {
+    .social-links,
+    .config-controls {
       gap: 0.2rem;
     }
     .social-icon {
