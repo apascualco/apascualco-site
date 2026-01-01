@@ -3,12 +3,8 @@
 ---
 
 <div class="lang-switch" role="group" aria-label="Language">
-  <button type="button" class="opt" data-lang="es" aria-pressed="true"
-    >ES</button
-  >
-  <button type="button" class="opt" data-lang="en" aria-pressed="false"
-    >EN</button
-  >
+  <button type="button" class="opt" data-lang="es">ES</button>
+  <button type="button" class="opt" data-lang="en">EN</button>
   <span class="thumb" aria-hidden="true"></span>
 </div>
 
@@ -55,35 +51,54 @@
     transition: left 0.18s ease;
     left: 4px;
   }
-  html[data-lang="en"] .lang-switch .thumb {
+  html[data-lang='en'] .lang-switch .thumb {
     left: calc(50% + 1px);
   }
-  html[data-lang="en"] .lang-switch .opt[data-lang="en"] {
+  html[data-lang='en'] .lang-switch .opt[data-lang='en'] {
     color: var(--font-color-highlight);
   }
-  html[data-lang="es"] .lang-switch .opt[data-lang="es"] {
+  html[data-lang='es'] .lang-switch .opt[data-lang='es'] {
     color: var(--font-color-highlight);
   }
 </style>
 
 <script>
-  const STORAGE_KEY = "lang";
+  const STORAGE_KEY = 'lang';
   const root = document.documentElement;
   const group = document.currentScript?.parentElement || document;
-  const btns = group.querySelectorAll<HTMLButtonElement>(".opt");
-  function applyLang(lang: string) {
-    root.setAttribute("lang", lang);
-    root.setAttribute("data-lang", lang);
-    try {
-      localStorage.setItem(STORAGE_KEY, lang);
-    } catch {}
+  const btns = group.querySelectorAll<HTMLButtonElement>('.opt');
+
+  function updateAriaCurrent(activeLang: string) {
+    btns.forEach((btn) => {
+      if (btn.dataset.lang === activeLang) {
+        btn.setAttribute('aria-current', 'true');
+      } else {
+        btn.removeAttribute('aria-current');
+      }
+    });
   }
 
+  function applyLang(lang: string) {
+    root.setAttribute('lang', lang);
+    root.setAttribute('data-lang', lang);
+    updateAriaCurrent(lang);
+    try {
+      localStorage.setItem(STORAGE_KEY, lang);
+    } catch {
+      // localStorage may be unavailable in private browsing
+    }
+  }
+
+  // Detect current language from URL
+  const pathLang = window.location.pathname.split('/')[1];
+  const currentLang = pathLang === 'en' || pathLang === 'es' ? pathLang : 'es';
+  updateAriaCurrent(currentLang);
+
   btns.forEach((b) => {
-    b.addEventListener("click", () => {
-      const currentLang = document.documentElement.getAttribute("data-lang");
-      const newLang = b.dataset.lang || "es";
-      if (currentLang !== newLang) {
+    b.addEventListener('click', () => {
+      const activeLang = document.documentElement.getAttribute('data-lang');
+      const newLang = b.dataset.lang || 'es';
+      if (activeLang !== newLang) {
         applyLang(newLang);
         window.location.href = `/${newLang}/`;
       }
