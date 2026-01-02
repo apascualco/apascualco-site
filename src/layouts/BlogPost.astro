@@ -154,11 +154,15 @@ const t = useTranslations(lang);
     margin: 0.2rem 0 0 0;
     font-size: 1.5rem;
     color: var(--font-color-highlight);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   .title .right {
     text-align: right;
-    flex: 0 0 auto;
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 55%;
   }
 
   .reading-time {
