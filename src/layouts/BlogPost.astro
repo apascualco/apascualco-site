@@ -284,6 +284,13 @@ const t = useTranslations(lang);
     text-align: center;
   }
 
+  :global(.content .floatLeft) {
+    float: left;
+    width: min(220px, 35%);
+    margin: 0.35rem 1.5rem 1rem 0;
+    text-align: center;
+  }
+
   :global(.content) {
     overflow-x: hidden;
   }
@@ -293,6 +300,11 @@ const t = useTranslations(lang);
       float: none;
       width: 100%;
       margin: 1rem 0;
+    }
+    :global(.content .floatLeft) {
+      float: none;
+      width: min(240px, 100%);
+      margin: 1.5rem auto;
     }
     .hero-image img {
       border-radius: 8px;
