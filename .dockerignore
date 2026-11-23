@@ -1,0 +1,16 @@
+.git
+.github
+.claude
+.vscode
+.husky
+.astro
+.idea
+node_modules
+dist
+Dockerfile
+.dockerignore
+*.md
+**/.DS_Store
+npm-debug.log*
+.env
+.env.*
