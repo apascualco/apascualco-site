@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Alberto Pascual Corpas · Senior Backend Engineer · CV</title>
+<meta name="author" content="Alberto Pascual Corpas">
+<style>
+@font-face { font-family: "Atkinson"; src: url("../public/fonts/atkinson-regular.woff") format("woff"); font-weight: 400; }
+@font-face { font-family: "Atkinson"; src: url("../public/fonts/atkinson-bold.woff") format("woff"); font-weight: 700; }
+@page { size: A4; margin: 14mm 15mm 14mm 15mm; }
+:root { --ink: #0f172a; --text: #1e293b; --muted: #475569; --line: #cbd5e1; --soft: #f1f5f9; }
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body { margin: 0; font-family: "Atkinson", "Helvetica Neue", Arial, sans-serif; font-size: 9.6pt; line-height: 1.42; color: var(--text); }
+a { color: inherit; text-decoration: none; }
+header { border-bottom: 2px solid var(--ink); padding-bottom: 8pt; margin-bottom: 10pt; }
+h1 { margin: 0; font-size: 22pt; line-height: 1.1; color: var(--ink); letter-spacing: -0.2pt; }
+.headline { margin: 3pt 0 6pt; font-size: 11pt; font-weight: 700; color: var(--muted); }
+.contact { display: flex; flex-wrap: wrap; gap: 2pt 12pt; font-size: 9pt; color: var(--muted); }
+h2 { margin: 12pt 0 6pt; font-size: 9pt; letter-spacing: 1.4pt; text-transform: uppercase; color: var(--ink); border-bottom: 1px solid var(--line); padding-bottom: 2pt; }
+p { margin: 0 0 5pt; }
+.summary b { color: var(--ink); }
+.job { margin-bottom: 8pt; break-inside: avoid; }
+.job-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8pt; }
+.job-title { font-weight: 700; color: var(--ink); font-size: 10.2pt; }
+.job-title span { font-weight: 400; color: var(--muted); }
+.dates { white-space: nowrap; font-size: 8.8pt; color: var(--muted); }
+.tag { display: inline-block; margin-left: 4pt; padding: 0 4pt; border-radius: 3pt; background: var(--soft); border: 1px solid var(--line); font-size: 7.8pt; font-weight: 700; color: var(--ink); vertical-align: 1pt; }
+ul { margin: 2pt 0 0; padding-left: 12pt; }
+li { margin: 0 0 1.5pt; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18pt; }
+.skills dt { font-weight: 700; color: var(--ink); margin-top: 3pt; }
+.skills dd { margin: 0 0 3pt; }
+.row { display: flex; justify-content: space-between; gap: 8pt; }
+.small { font-size: 8.8pt; color: var(--muted); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Alberto Pascual Corpas</h1>
+  <div class="headline">Senior Backend Engineer · Distributed Systems, Cloud Architecture &amp; Production AI/ML</div>
+  <div class="contact">
+    <span>Barcelona, Spain</span>
+    <a href="mailto:apascualco@gmail.com">apascualco@gmail.com</a>
+    <a href="https://www.linkedin.com/in/apascualco/">linkedin.com/in/apascualco</a>
+    <a href="https://github.com/apascualco">github.com/apascualco</a>
+    <a href="https://www.apascualco.com/en/">apascualco.com</a>
+  </div>
+</header>
+
+<section class="summary">
+  <h2>Profile</h2>
+  <p>Backend engineer with <b>12+ years</b> building systems that hold up in production. Today I focus on <b>bringing AI into production</b>: LLM orchestration, agentic workflows and tool integrations, with the same evaluation, observability and failure-handling discipline that any critical platform demands.</p>
+  <p>My career has a common thread: getting to the next technology wave early and applying <b>distributed-systems</b> rigor to it. Founding engineer and later <b>Chief Product Officer</b> at a startup, backend lead when blockchain was still new in production, and years of architecture, cost control and capacity planning at scale. Comfortable across technology, product and business, and a mentor to fast-growing teams.</p>
+</section>
+
+<section>
+  <h2>Experience</h2>
+
+  <div class="job">
+    <div class="job-head"><div class="job-title">Senior Software Engineer <span>· Acai Travel</span><span class="tag">AI/ML</span></div><div class="dates">Oct 2025 – Present · Barcelona</div></div>
+    <ul>
+      <li>Design and ship the AI infrastructure behind an agentic layer for post-booking travel operations: fare rules, flight disruptions (IRROPS), refunds, waivers and traveler communications.</li>
+      <li>LLM orchestration, multi-step agentic workflows and integration of foundation models with external tools and APIs, with rigorous evaluation and observability.</li>
+      <li>Products used by enterprise customers such as TravelPerk, Kiwi.com and Lufthansa City Center, replacing workflows that still run on large call centers.</li>
+    </ul>
+  </div>
+
+  <div class="job">
+    <div class="job-head"><div class="job-title">Senior Backend Engineer <span>· Wallapop</span></div><div class="dates">May 2025 – Aug 2025 · Barcelona</div></div>
+    <ul>
+      <li>SELVA team: modernization of business-critical backend services at one of Europe’s best-known marketplaces.</li>
+      <li>Identified technical bottlenecks and proposed concrete architecture and process improvements to raise reliability; spread engineering best practices.</li>
+    </ul>
+  </div>
+
+  <div class="job">
+    <div class="job-head"><div class="job-title">Senior Backend Engineer <span>· SEAT:CODE</span></div><div class="dates">Dec 2021 – May 2025 · Barcelona</div></div>
+    <ul>
+      <li>OVS backend team: architecture definition, cost control, and capacity and performance planning.</li>
+      <li>Introduced distributed caching and drove a migration to a more efficient service architecture.</li>
+      <li>Improved developer experience and took an active part in backend technical chapters, supporting other teams.</li>
+    </ul>
+  </div>
+
+  <div class="job">
+    <div class="job-head"><div class="job-title">Technical Lead · Chief Product Officer <span>· INCOM</span></div><div class="dates">Mar 2022 – May 2024 · Barcelona</div></div>
+    <ul>
+      <li>Founding engineer working hand in hand with the board: defined, architected and built the platform and APIs from scratch.</li>
+      <li>Integrated key payment gateways and owned backend and infrastructure as code, cutting costs without sacrificing performance.</li>
+      <li>From Nov 2023, also Chief Product Officer: product vision, strategy and roadmap across business, technology and user experience.</li>
+    </ul>
+  </div>
+
+  <div class="job">
+    <div class="job-head"><div class="job-title">Lead Backend Engineer <span>· BLOOCK</span></div><div class="dates">Sep 2021 – Dec 2021 · Barcelona</div></div>
+    <ul>
+      <li>Led the backend of a fast-growing blockchain startup: integration and optimization of the existing API, taking the technology into production.</li>
+      <li>Mentored a young, rapidly expanding team.</li>
+    </ul>
+  </div>
+
+  <div class="job">
+    <div class="job-head"><div class="job-title">Senior Backend Software Engineer <span>· DEXMA Energy Intelligence</span></div><div class="dates">Oct 2020 – Sep 2021 · Barcelona</div></div>
+    <ul>
+      <li>Platform team: stability and new features, IoT device integrations, and a high-throughput ingestion engine with real-time data-point calculations, reliable at scale.</li>
+    </ul>
+  </div>
+
+  <div class="job">
+    <div class="job-head"><div class="job-title">Backend Software Engineer <span>· VeryChic</span></div><div class="dates">Jan 2018 – Oct 2020 · Barcelona</div></div>
+    <ul>
+      <li>Sole backend engineer: API and data consolidation agents, a monolith built on SOLID principles and Hexagonal Architecture, AWS Lambdas for data collection, Spring batch processes and the cloud infrastructure.</li>
+    </ul>
+  </div>
+
+  <div class="job">
+    <div class="job-head"><div class="job-title">Software Developer <span>· Gfi España</span></div><div class="dates">Sep 2014 – Jan 2018 · Barcelona</div></div>
+    <ul>
+      <li>Consulting for multiple clients, growing from junior to increasingly complex responsibilities: API design and development, instrumentation tooling for Oracle, WebSphere and Tomcat, and a private architecture for one client.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="grid">
+  <div>
+    <h2>Skills</h2>
+    <dl class="skills">
+      <dt>AI / ML in production</dt>
+      <dd>LLM orchestration, agentic workflows, tool and API integration, evaluation, observability, MLOps</dd>
+      <dt>Backend &amp; architecture</dt>
+      <dd>Distributed systems, microservices, event-driven systems, DDD, Clean and Hexagonal Architecture, SOLID</dd>
+      <dt>Languages</dt>
+      <dd>Go, Kotlin, Python, Java (Spring)</dd>
+      <dt>Cloud &amp; operations</dt>
+      <dd>AWS, infrastructure as code, cost optimization, capacity and performance planning</dd>
+    </dl>
+  </div>
+  <div>
+    <h2>Education</h2>
+    <div class="row"><b>Universitat Oberta de Catalunya (UOC)</b><span class="small">Online</span></div>
+    <p>Computer Engineering degree, studied online alongside full-time work.</p>
+    <div class="row"><b>Institut Obert de Catalunya (IOC)</b><span class="small">2013</span></div>
+    <p>Higher Technician in Multiplatform Application Development.</p>
+    <h2>Languages</h2>
+    <p>Spanish: native · Catalan: native<br>English: B2 (upper-intermediate), preparing for C1</p>
+  </div>
+</section>
+</body>
+</html>
