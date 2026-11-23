@@ -73,6 +73,18 @@ const description =
     .cv-about b {
       color: var(--font-color-normal);
     }
+
+    .cv-about :global(a) {
+      color: var(--font-color-highlight);
+      font-weight: 700;
+      text-decoration: none;
+      border-bottom: 1px solid currentColor;
+      transition: opacity 0.15s ease;
+    }
+
+    .cv-about :global(a:hover) {
+      opacity: 0.75;
+    }
     .timeline {
       position: relative;
       margin: 0 auto;
