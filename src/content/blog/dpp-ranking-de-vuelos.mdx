@@ -1,0 +1,136 @@
+---
+title: 'dpp: vuelos buenos y distintos con un Determinantal Point Process'
+description: 'Más allá del ranking: elegir opciones relevantes y variadas a la vez, aprender de cada elección y poder explicar cada número'
+pubDate: 'Nov 23 2026'
+lang: 'es'
+alternate: 'dpp-flight-ranking'
+featured: true
+heroImage: '../../assets/post/dpp.png'
+---
+
+import { Image } from 'astro:assets';
+import result from '../../assets/post/dpp-result.png';
+
+### Índice
+
+1. [Contexto](#1-contexto)
+2. [Relevancia y diversidad: el concepto](#2-relevancia-y-diversidad-el-concepto)
+3. [Ejemplo práctico: dos vuelos y un determinante](#3-ejemplo-práctico-dos-vuelos-y-un-determinante)
+4. [Cómo está construido](#4-cómo-está-construido)
+5. [Explicar cada número](#5-explicar-cada-número)
+6. [Limitaciones](#6-limitaciones)
+7. [Reflexión](#7-reflexión)
+8. [Fuentes y lecturas recomendadas](#8-fuentes-y-lecturas-recomendadas)
+
+Cuando busco un vuelo me pasa algo curioso: las primeras ocho opciones casi nunca son ocho opciones. Son la misma con pequeñas variaciones: la misma aerolínea, la misma franja horaria, diez euros arriba o abajo. Técnicamente están bien ordenadas. En la práctica, no me ayudan a decidir.
+
+Ese pequeño fastidio fue el punto de partida de **dpp**, un buscador de vuelos que intenta responder a una pregunta concreta: **¿cómo elegir resultados que sean buenos y, a la vez, distintos entre sí?**
+
+# 1. Contexto
+
+La forma clásica de ordenar resultados es sencilla: le das una puntuación a cada elemento, ordenas y te quedas con los primeros. Funciona bien cuando cada opción vale lo mismo esté al lado de lo que esté. Pero con los vuelos no es así. **El valor de una opción depende de las que la acompañan**: un octavo vuelo casi idéntico a los siete anteriores no aporta casi nada.
+
+En sistemas de recomendación y de búsqueda esto se conoce como el problema de la **diversidad**. Hay soluciones que penalizan los resultados parecidos después de ordenar, como MMR (Carbonell y Goldstein, 1998). Pero hay una forma, a mi juicio, más elegante de plantearlo: el **Determinantal Point Process (DPP)**, que viene de la probabilidad y la física y que Kulesza y Taskar popularizaron en machine learning en 2012.
+
+# 2. Relevancia y diversidad: el concepto
+
+Un DPP necesita dos ingredientes:
+
+- la **relevancia** de cada vuelo, `q`, que en dpp sale de un modelo aprendido,
+- y la **similitud** entre cada par de vuelos, `S`, entre 0 (nada parecidos) y 1 (iguales).
+
+Con eso se construye una matriz, el kernel `L`, donde cada celda es `L[i][j] = q[i] · S[i][j] · q[j]`. Y aquí viene la idea clave: el DPP da a cada conjunto de vuelos una puntuación proporcional al **determinante** de su submatriz.
+
+El determinante tiene una lectura geométrica muy intuitiva: es el volumen que ocupan los vectores. Si dos vectores apuntan casi en la misma dirección, el volumen que encierran es casi nulo. Si leíste la entrada sobre [proximidad semántica](/es/blog/proximidad-semantica/), aquí vuelve la misma idea: **lo parecido apenas ocupa espacio**. Y cuanto más relevantes son los vuelos, más largos son esos vectores y más volumen ocupan.
+
+Por eso un único número equilibra las dos cosas a la vez: **sube con la relevancia y se hunde cuando dos vuelos se parecen demasiado**.
+
+# 3. Ejemplo práctico: dos vuelos y un determinante
+
+Con solo dos vuelos, el determinante se reduce a una expresión muy simple: `q1² · q2² · (1 − s²)`, donde `s` es lo que se parecen. Si son idénticos, `s = 1` y el determinante es 0, por muy buenos que sean.
+
+Supongamos que ya tenemos el vuelo **A**, el más relevante (`q = 1.0`), y dudamos entre añadir **B** o **C**:
+
+- **B** es casi tan bueno (`q = 0.9`) pero casi igual que A (`s = 0.95`),
+- **C** es peor (`q = 0.7`) pero bastante distinto (`s = 0.3`).
+
+```go
+package main
+
+import "fmt"
+
+func det2(qa, qb, s float64) float64 {
+	return qa * qa * qb * qb * (1 - s*s)
+}
+
+func main() {
+	fmt.Printf("A+B: %.3f\n", det2(1.0, 0.9, 0.95))
+	fmt.Printf("A+C: %.3f\n", det2(1.0, 0.7, 0.30))
+}
+```
+
+```
+A+B: 0.079
+A+C: 0.446
+```
+
+Gana **C**, aunque sea menos relevante. Es exactamente lo que haría una persona: si ya tienes un vuelo a las 12:40 con Air Europa, otro a las 12:50 con Air Europa no te ayuda; uno por la tarde con otra compañía, sí.
+
+Con más vuelos el problema se complica, porque encontrar el mejor subconjunto es muy caro. dpp usa la aproximación voraz de Chen, Zhang y Zhou (2018): en cada ronda añade el vuelo que más hace crecer el determinante, y mantiene una descomposición de Cholesky para no recalcularlo todo desde cero.
+
+# 4. Cómo está construido
+
+El motor está escrito en **Go**. Para cada búsqueda pide unos cuarenta vuelos a un proveedor (de momento, un servicio que genera vuelos realistas), aplica una política de viaje que descarta los vuelos nocturnos, los de más de dos escalas y los que cuestan más del doble del más barato, y describe cada candidato con cuatro rasgos relativos a esa búsqueda: cuánto más caro es que el más barato, cuántas horas de más tarda, cuántas escalas tiene y si sale de madrugada.
+
+Esos rasgos pasan por un modelo que da la relevancia, se combinan con la similitud y el algoritmo voraz elige los resultados.
+
+Lo que me interesaba de verdad era cerrar el ciclo. Cada página de resultados y cada elección se publican como eventos en **Kafka**, y unos procesos en Go los convierten en datos de entrenamiento por capas: el registro en bruto, los conjuntos consolidados con lo que se eligió en cada búsqueda y, al final, una tabla lista para entrenar. Un entrenador en **Python** ajusta un modelo logit condicional y publica la versión nueva en un registro de modelos. El motor lo recarga en caliente y puede repartir el tráfico entre un modelo **campeón** y un **retador**, con la opción de volver atrás al instante.
+
+Para saber si el entrenamiento funciona, construí un simulador de viajeros con **preferencias conocidas**: les molesta pagar de más (−3), las horas de más (−0,25), las escalas (−1,2) y salir de madrugada (−1,5). Después de 1.687 búsquedas, el modelo aprendió −2,80, −0,25 y −1,19 para las tres primeras.
+
+¿Y la cuarta? El modelo aprendió **0**. Al principio pensé que era un error, pero tenía todo el sentido: la política de viaje descarta los vuelos de madrugada antes de que lleguen al ranking. El modelo nunca vio uno, así que no podía aprender nada sobre ellos.
+
+**Un modelo no puede aprender de lo que nunca ve.**
+
+Todo corre en mi [homelab](/es/blog/homelab-tres-raspberry-pi/): cada push construye las imágenes en GitHub Actions y un runner dentro del clúster las despliega. Como la demo es pública, las entradas tienen límites, cada servicio tiene su techo de CPU y memoria, y las métricas me dicen si alguien lo usa.
+
+# 5. Explicar cada número
+
+La parte de la que estoy más contento no es el algoritmo, sino la explicación. Debajo de los resultados, la página recorre los **18 pasos** de esa búsqueda con los números reales del motor: lo que devolvió el proveedor, qué filtró la política, los rasgos de cada vuelo, los pesos del modelo, el kernel, el determinante y cada ronda del algoritmo. Y cada número se puede pulsar para ver su fórmula, los valores que se sustituyeron y de qué paso viene.
+
+<figure>
+  <Image
+    src={result}
+    alt="Último paso de la explicación de dpp: los ocho vuelos elegidos, con su relevancia y el determinante final"
+    width={1020}
+    quality={85}
+    loading="lazy"
+    decoding="async"
+  />
+  <figcaption>
+    El último paso: qué eligió el DPP, por qué y qué habría mostrado un ranking solo por relevancia.
+  </figcaption>
+</figure>
+
+Lo construí para mí antes que para nadie. En [El nuevo telar](/es/blog/el-nuevo-telar/) escribía que delegar la ejecución es una cosa y delegar el criterio, otra muy distinta. Con un modelo pasa lo mismo: **si no entiendo por qué elige lo que elige, le estoy delegando el criterio**. Y, de paso, ver los números reales de cada paso sacó a la luz errores que las métricas solas habrían escondido.
+
+# 6. Limitaciones
+
+No quiero venderlo como algo que no es:
+
+- los datos son sintéticos: el proveedor y los viajeros son simulados, y el comportamiento real es bastante más ruidoso,
+- el modelo es deliberadamente sencillo, con solo cuatro rasgos,
+- la similitud no se aprende: la calculo a partir de perfiles que defino yo, como la aerolínea, la franja de salida, las escalas y la banda de precio,
+- y la demo pública no guarda eventos, a propósito, así que no aprende de quien la visita.
+
+# 7. Reflexión
+
+dpp empezó como un experimento con un algoritmo que me parecía bonito y acabó siendo un sistema completo: servicio, eventos, datos, entrenamiento, registro de modelos y despliegue.
+
+Me llevo tres ideas. La primera, que **la diversidad es una decisión de modelado, no un filtro**: meterla en el kernel, en vez de en un retoque posterior, mantiene el resultado explicable. La segunda, que explicar sale a cuenta. Y la tercera, que conviene **cerrar el ciclo cuanto antes**: tener eventos, datos y registro de modelos desde el primer día es lo que convierte una demo en un sistema que puede mejorar.
+
+# 8. Fuentes y lecturas recomendadas
+
+- Kulesza, A. y Taskar, B. (2012). _Determinantal Point Processes for Machine Learning_. [arxiv.org/abs/1207.6083](https://arxiv.org/abs/1207.6083)
+- Chen, L., Zhang, G. y Zhou, H. (2018). _Fast Greedy MAP Inference for Determinantal Point Process to Improve Recommendation Diversity_. NeurIPS. [arxiv.org/abs/1709.05135](https://arxiv.org/abs/1709.05135)
+- Carbonell, J. y Goldstein, J. (1998). _The Use of MMR, Diversity-Based Reranking for Reordering Documents and Producing Summaries_. SIGIR.

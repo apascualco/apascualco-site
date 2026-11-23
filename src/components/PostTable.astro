@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { calculateReadingTime } from '../utils/readingTime';
+import { useTranslations } from '../i18n/translations';
 
 export interface Props {
   posts: CollectionEntry<'blog'>[];
@@ -8,6 +9,7 @@ export interface Props {
 }
 
 const { posts, lang } = Astro.props;
+const t = useTranslations(lang);
 
 function groupPostsByYear(posts: CollectionEntry<'blog'>[]) {
   return posts.reduce(
@@ -22,7 +24,10 @@ function groupPostsByYear(posts: CollectionEntry<'blog'>[]) {
 }
 
 const groupedPosts = groupPostsByYear(
-  posts.filter((post) => !post.data.draft).filter((post) => post.data.lang === lang)
+  posts
+    .filter((post) => !post.data.draft)
+    .filter((post) => post.data.lang === lang)
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
 );
 ---
 
@@ -40,10 +45,18 @@ const groupedPosts = groupPostsByYear(
             {posts.map((post) => {
               const readingTime = calculateReadingTime(post.body ?? '');
               return (
-                <a href={`/${lang}/blog/${post.id}`} class="post-item">
-                  <span class="post-title">{post.data.title}</span>
+                <a
+                  href={`/${lang}/blog/${post.id}/`}
+                  class:list={['post-item', { featured: post.data.featured }]}
+                >
+                  <span class="post-title">
+                    {post.data.title}
+                    {post.data.featured && <span class="badge">★ {t('featured')}</span>}
+                  </span>
                   <span class="post-description">{post.data.description}</span>
-                  <span class="post-time">☕ {readingTime} min read</span>
+                  <span class="post-time">
+                    ☕ {readingTime} {t('minRead')}
+                  </span>
                 </a>
               );
             })}
@@ -126,6 +139,19 @@ const groupedPosts = groupPostsByYear(
   .post-title {
     color: var(--font-color-highlight);
     font-weight: 500;
+  }
+
+  .badge {
+    display: inline-block;
+    margin-left: 0.5rem;
+    padding: 0.05rem 0.5rem;
+    font-size: 0.68em;
+    font-weight: 600;
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    background: var(--background-highlight);
+    vertical-align: 0.15em;
+    white-space: nowrap;
   }
 
   .post-description {

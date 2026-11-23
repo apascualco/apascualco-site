@@ -3,9 +3,11 @@ import type { CollectionEntry } from 'astro:content';
 
 import { getCollection } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
+import StructuredData from '../../components/StructuredData.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
+import Hero from '../../components/Hero.astro';
 import PostTable from '../../components/PostTable.astro';
 const posts: CollectionEntry<'blog'>[] = (await getCollection('blog')).sort(
   (a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf()
@@ -16,14 +18,30 @@ const posts: CollectionEntry<'blog'>[] = (await getCollection('blog')).sort(
 <html lang="en">
   <head>
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <StructuredData type="Person" />
   </head>
   <body>
     <Header lang="en" />
     <main id="main-content">
-      <section>
+      <Hero lang="en" />
+      <section class="home-section" id="writing">
+        <h2 class="section-title">Writing</h2>
         <PostTable posts={posts} lang="en" />
       </section>
     </main>
     <Footer />
   </body>
 </html>
+
+<style>
+  .home-section {
+    margin-bottom: 2.5rem;
+  }
+  .section-title {
+    font-size: 0.85rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--font-color-normal);
+    margin: 0 0 1rem;
+  }
+</style>

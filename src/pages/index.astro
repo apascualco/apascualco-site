@@ -1,21 +1,36 @@
 ---
-import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <title>{SITE_TITLE}</title>
     <meta name="description" content={SITE_DESCRIPTION} />
-    <meta http-equiv="refresh" content={`0; url="/es/"`} />
+    <link rel="canonical" href="https://www.apascualco.com/en/" />
+    <link rel="alternate" hreflang="en" href="https://www.apascualco.com/en/" />
+    <link rel="alternate" hreflang="es" href="https://www.apascualco.com/es/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.apascualco.com/en/" />
     <script is:inline>
-      setTimeout(() => {
-        window.location.href = "/es";
-      }, 100);
+      (function () {
+        let lang = 'en';
+        try {
+          const stored = localStorage.getItem('lang');
+          if (stored === 'es' || stored === 'en') {
+            lang = stored;
+          } else if ((navigator.language || '').toLowerCase().startsWith('es')) {
+            lang = 'es';
+          }
+        } catch {
+          lang = 'en';
+        }
+        window.location.replace('/' + lang + '/');
+      })();
     </script>
+    <noscript><meta http-equiv="refresh" content="0; url=/en/" /></noscript>
   </head>
   <body>
-    <p>Redirecting to <a href="/es" }>es</a>...</p>
+    <p><a href="/en/">English</a> · <a href="/es/">Español</a></p>
   </body>
 </html>

@@ -1,0 +1,105 @@
+---
+title: 'Un laboratorio en casa: Kubernetes en tres Raspberry Pi'
+description: 'Un sitio donde probar ideas antes de llevarlas al trabajo: qué quería validar, qué me ha enseñado y qué viene después'
+pubDate: 'Nov 23 2026'
+lang: 'es'
+alternate: 'homelab-three-raspberry-pi'
+featured: true
+heroImage: '../../assets/post/homelab-rack.jpg'
+---
+
+import { Image } from 'astro:assets';
+import homelab from '../../assets/post/homelab.png';
+
+### Índice
+
+1. [Contexto](#1-contexto)
+2. [Las ideas que quería probar](#2-las-ideas-que-quería-probar)
+3. [Desplegar sin abrir la puerta](#3-desplegar-sin-abrir-la-puerta)
+4. [Lo que me ha enseñado el laboratorio](#4-lo-que-me-ha-enseñado-el-laboratorio)
+5. [Lo que viene](#5-lo-que-viene)
+6. [Reflexión](#6-reflexión)
+
+Para mí, un homelab es exactamente eso: **un laboratorio**. Un sitio donde probar ideas antes de llevarlas al trabajo.
+
+En el trabajo hay poco margen para experimentar. Los sistemas tienen usuarios, los cambios tienen consecuencias y, con razón, cuesta justificar probar algo «a ver qué pasa». Pero muchas de las decisiones que acabamos tomando allí empiezan como una intuición que nadie ha visto funcionar todavía.
+
+**El homelab es donde esas intuiciones pueden fallar sin que pase nada.**
+
+Aquí puedo montar un clúster, romperlo a propósito, cambiar de idea tres veces en una tarde y encontrarme con los problemas que no salen en la documentación. Y cuando algo funciona, llego al trabajo con algo más que una opinión: llego con la experiencia de haberlo operado.
+
+# 1. Contexto
+
+No monté el homelab para aprender cómo funcionan Kubernetes, Terraform o Cloudflare. Eso ya lo conocía. Lo monté para tener un sitio donde **validar ideas concretas** antes de defenderlas en el trabajo: ¿aguanta un plano de control en alta disponibilidad sobre hardware barato? ¿Se puede publicar en internet sin abrir un solo puerto? ¿Se puede desplegar desde GitHub sin que GitHub entre en tu red? ¿Hasta dónde llega gestionarlo absolutamente todo como código?
+
+Por eso, aunque sea un laboratorio, lo trato con reglas de producción: nada de cambios a mano, todo descrito como código, métricas y alertas desde el principio, y un modelo de seguridad que pudiera explicar en voz alta sin ponerme rojo. **Si las pruebas se hacen en condiciones de juguete, las conclusiones también lo son.**
+
+Y como un laboratorio vacío no prueba gran cosa, hoy sirve [este mismo blog](https://blog.apascualco.com) y [dpp](/es/blog/dpp-ranking-de-vuelos/), un buscador de vuelos del que hablo en otra entrada.
+
+# 2. Las ideas que quería probar
+
+<figure>
+  <Image
+    src={homelab}
+    alt="Diagrama del homelab: Cloudflare delante, el clúster k3s en tres Raspberry Pi en el centro, la observabilidad debajo y GitHub a la derecha"
+    width={1020}
+    quality={85}
+    loading="lazy"
+    decoding="async"
+  />
+  <figcaption>
+    Vista general: Cloudflare delante, el clúster en el centro y GitHub a la derecha.
+  </figcaption>
+</figure>
+
+La primera idea era **la alta disponibilidad con hardware modesto**. Tres Raspberry Pi 4 de 8 GB, que arrancan desde discos SSD por USB, forman un clúster k3s con el plano de control repartido entre las tres y etcd integrado. La API cuelga de una IP virtual que gestiona kube-vip. La hipótesis era que podía perder una Pi sin perder el clúster, y la única forma de creérmelo era comprobarlo: apagué nodos a propósito y la IP saltó a otro en unos veinte segundos.
+
+La segunda, **no abrir ningún puerto web**. Es el propio clúster el que abre un túnel hacia Cloudflare, y Cloudflare recibe las visitas y las manda por ese túnel. Lo que no debe ser público, como Grafana, queda detrás de Cloudflare Access, que pide un código que llega a mi correo antes incluso de llegar al login de Grafana. Quería saber si un modelo así, sin nada expuesto, era cómodo en el día a día. Lo es.
+
+La tercera, **llevar el «todo como código» hasta el final**. Terraform gestiona los namespaces, las aplicaciones, los charts de Helm, el DNS, el túnel, las políticas de acceso e incluso los dashboards y las alertas de Grafana. Con una regla que intento no saltarme: después de aplicar un cambio, el siguiente `plan` tiene que decir «No changes». Si no lo dice, algo ha cambiado por detrás y quiero saber qué.
+
+Y la cuarta, que **la observabilidad no fuera un añadido**. Prometheus recoge métricas de los nodos, de Kubernetes, de sondas de red, de Traefik y de las propias aplicaciones, y Grafana me avisa por Telegram si una Pi deja de responder, si sube la temperatura, si hay bajo voltaje, si se llena un disco o si me quedo sin internet.
+
+# 3. Desplegar sin abrir la puerta
+
+Esta era la idea que más ganas tenía de probar, porque es un problema que aparece en cualquier empresa: quería que un `git push` acabara desplegado solo, pero sin dejar que GitHub entrara en mi clúster.
+
+La solución fue separar los repositorios **según cuánto me fío de ellos**.
+
+Los repositorios privados usan un runner de GitHub Actions que vive dentro del clúster. Es él quien se conecta a GitHub para pedir trabajo, nunca al revés, y sus permisos se limitan a actualizar despliegues en su propio namespace. No puede leer secretos ni tocar nada más.
+
+Con los repositorios públicos, como el de esta web, eso no me valía. Un runner propio en un repositorio público es casi una invitación: cualquiera podría intentar ejecutar código en mi hardware con una pull request. Así que ahí el clúster no habla con GitHub Actions en absoluto. GitHub construye la imagen y la sube al registro, y un pequeño proceso del clúster pregunta cada cinco minutos si hay una versión nueva. Si la hay, la despliega.
+
+Es menos inmediato, sí. Pero **prefiero esperar cinco minutos a dejar una puerta abierta**.
+
+# 4. Lo que me ha enseñado el laboratorio
+
+Para esto sirve un laboratorio: para que aparezcan los problemas que no salen en ningún tutorial. Y, curiosamente, ninguno ha sido el que esperaba.
+
+El primero llegó un fin de semana. Una de las Pi se quedó medio viva: respondía al ping, aceptaba la conexión SSH y la cortaba, y k3s se había parado. La causa resultó ser la caja USB del disco, que en modo UAS dejaba de escribir. Desactivar UAS lo arregló, pero lo que me llevo es otra cosa: sin los registros del sistema guardados en disco no habría sabido qué había pasado. Desde entonces son persistentes.
+
+El segundo me ha pasado dos veces, con dos componentes distintos: primero con Grafana y después con un pequeño contenedor que acompaña a Prometheus. En los dos casos el límite de memoria era tan justo que **la caché de páginas de su propio binario no cabía**, así que el sistema lo releía del disco una y otra vez. En el segundo caso llegó a leer a unos 290 MB/s, saturó el disco de la Pi y dejó a Prometheus fuera de servicio a ratos. La solución no fue afinar nada: fue darles margen.
+
+Lo peor de ese episodio no fue el fallo en sí, sino que **las alertas callaron**. Cuando Grafana no podía consultar a Prometheus, las reglas pasaban a «todo bien» en silencio. Un sistema de alertas que no avisa cuando no puede vigilar es casi peor que no tenerlo. Ahora, si una consulta falla, la alerta salta. De todo lo que ha salido de aquí, probablemente sea lo que más me llevo al trabajo.
+
+El tercero fue más sutil. Desplegué una versión nueva de dpp y la web seguía comportándose como la anterior. Cloudflare había guardado el JavaScript viejo y lo seguía sirviendo junto al HTML nuevo. Ahora el HTML y el código se sirven sin caché, y solo se cachean los ficheros que llevan una huella en el nombre.
+
+Y el último fue casi una lección de humildad. El estado de Terraform, ese fichero que dice qué gestiona Terraform y qué no, vivía en un único portátil. El día que necesité aplicar un cambio desde otro equipo, no podía. Lo reconstruí a partir de la infraestructura real con bloques `import`, revisé campo a campo cada cambio que proponía Terraform antes de aplicarlo y lo moví dentro del propio clúster.
+
+**Una única copia de algo importante no es una copia: es un riesgo.**
+
+# 5. Lo que viene
+
+Este laboratorio tiene un límite evidente: el hardware. Tres Raspberry Pi dan para mucho, pero no para todo, y me queda conseguir algo más de hardware para que esto sea todavía más interesante.
+
+Tengo bastante claro por dónde empezaría: **un PC de inferencia**. Trabajo a diario con modelos de lenguaje, y una máquina con GPU en casa me permitiría probar modelos abiertos en local, medir latencias y costes de verdad y experimentar con flujos agénticos sin depender de nadie. Que es, al fin y al cabo, la idea de todo esto: probarlo aquí antes de defenderlo allí.
+
+Y, de paso, cambiar el switch: el actual negocia a 100 Mb/s y, en cuanto haya algo más que tres Raspberry Pi, se va a notar.
+
+# 6. Reflexión
+
+No es un sistema perfecto, y prefiero decirlo yo. Todo el monitoring vive en una sola Pi, así que si cae esa me quedo a ciegas, y el estado de Terraform todavía no tiene una copia fuera de casa. Las dos cosas están en la lista.
+
+Pero cumple su función. Cada uno de esos fallos es algo que ya no tendré que descubrir por primera vez en el trabajo, y cada idea que ha sobrevivido aquí llega allí con algo de experiencia detrás. Algunas acabarán en producción y otras se quedarán en casa, y está bien que sea así.
+
+Y quizá esa sea mi conclusión. **Un laboratorio no sirve para tener razón; sirve para equivocarse barato.** Mejor romper un clúster de tres Raspberry Pi en casa que descubrir lo mismo con usuarios al otro lado.

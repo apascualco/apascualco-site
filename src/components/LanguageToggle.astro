@@ -97,16 +97,19 @@
   }
 
   const pathLang = window.location.pathname.split('/')[1];
-  const currentLang = pathLang === 'en' || pathLang === 'es' ? pathLang : 'es';
+  const currentLang = pathLang === 'en' || pathLang === 'es' ? pathLang : 'en';
   updateAriaCurrent(currentLang);
 
   btns.forEach((b) => {
     b.addEventListener('click', () => {
       const activeLang = document.documentElement.getAttribute('data-lang');
-      const newLang = b.dataset.lang || 'es';
+      const newLang = b.dataset.lang || 'en';
       if (activeLang !== newLang) {
         applyLang(newLang);
-        window.location.href = `/${newLang}/`;
+        const alternate = document.querySelector<HTMLLinkElement>(
+          `link[rel="alternate"][hreflang="${newLang}"]`
+        );
+        window.location.href = alternate?.href || `/${newLang}/`;
       }
     });
   });

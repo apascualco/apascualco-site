@@ -20,7 +20,8 @@ const schemas: Record<string, object> = {
     '@type': 'WebSite',
     name: 'Alberto Pascual Corpas',
     url: siteUrl,
-    description: 'Senior Backend Engineer | Backend & Cloud Architecture',
+    description:
+      'Senior Backend Engineer bringing AI and backend systems into production: distributed systems, cloud architecture and production AI/ML.',
     inLanguage: ['es', 'en'],
   },
   Person: {
@@ -29,7 +30,27 @@ const schemas: Record<string, object> = {
     name: 'Alberto Pascual Corpas',
     url: siteUrl,
     jobTitle: 'Senior Backend Engineer',
-    sameAs: ['https://www.linkedin.com/in/apascualco', 'https://github.com/apascualco'],
+    description:
+      'Senior Backend Engineer with 12+ years of experience bringing AI and backend systems into production.',
+    worksFor: { '@type': 'Organization', name: 'Acai Travel' },
+    address: { '@type': 'PostalAddress', addressLocality: 'Barcelona', addressCountry: 'ES' },
+    knowsAbout: [
+      'Distributed systems',
+      'Backend architecture',
+      'Cloud architecture',
+      'LLM orchestration',
+      'Agentic AI workflows',
+      'MLOps',
+      'Go',
+      'Kotlin',
+      'Python',
+      'Kubernetes',
+    ],
+    sameAs: [
+      'https://www.linkedin.com/in/apascualco',
+      'https://github.com/apascualco',
+      'https://apascualco.substack.com',
+    ],
   },
   BlogPosting: {
     '@context': 'https://schema.org',

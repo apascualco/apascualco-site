@@ -11,11 +11,12 @@ interface Props {
   description: string;
   image?: ImageMetadata;
   type?: 'website' | 'article';
+  alternates?: Partial<Record<'es' | 'en', string>>;
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, image = FallbackImage, type = 'website' } = Astro.props;
+const { title, description, image = FallbackImage, type = 'website', alternates } = Astro.props;
 
 // Social previews (LinkedIn, X, Slack...) expect 1200x630 (1.91:1) and handle JPG reliably, not WebP.
 // Astro never upscales, so smaller sources keep the ratio at their own width.
@@ -32,7 +33,11 @@ const ogImage = await getImage({
 const ogImageURL = new URL(ogImage.src, Astro.site);
 
 const pathname = Astro.url.pathname;
-const getAlternateUrl = (targetLang: string) => {
+const getAlternateUrl = (targetLang: 'es' | 'en') => {
+  const explicit = alternates?.[targetLang];
+  if (explicit) {
+    return new URL(explicit, Astro.site);
+  }
   if (pathname.startsWith('/es/')) {
     return new URL(pathname.replace('/es/', `/${targetLang}/`), Astro.site);
   } else if (pathname.startsWith('/en/')) {
@@ -67,7 +72,7 @@ const getAlternateUrl = (targetLang: string) => {
 
 <link rel="alternate" hreflang="es" href={getAlternateUrl('es')} />
 <link rel="alternate" hreflang="en" href={getAlternateUrl('en')} />
-<link rel="alternate" hreflang="x-default" href={getAlternateUrl('es')} />
+<link rel="alternate" hreflang="x-default" href={getAlternateUrl('en')} />
 
 <title>{title}</title>
 <meta name="title" content={title} />
@@ -91,7 +96,9 @@ const getAlternateUrl = (targetLang: string) => {
 <script is:inline>
   (function () {
     try {
-      const lang = localStorage.getItem('lang') || 'es';
+      const fromPath = window.location.pathname.split('/')[1];
+      const lang =
+        fromPath === 'es' || fromPath === 'en' ? fromPath : localStorage.getItem('lang') || 'en';
       const root = document.documentElement;
       root.setAttribute('lang', lang);
       root.setAttribute('data-lang', lang);

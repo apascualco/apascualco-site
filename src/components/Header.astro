@@ -18,10 +18,7 @@ const { lang } = Astro.props;
 const safeLang: 'es' | 'en' = lang === 'en' ? 'en' : 'es';
 const t = useTranslations(safeLang);
 
-const subtitle =
-  safeLang === 'es'
-    ? 'SSE · Más de 11 años construyendo software escalable'
-    : 'SSE · 11+ years building scalable software solutions';
+const subtitle = t('tagline');
 ---
 
 <a href="#main-content" class="skip-link">
@@ -30,7 +27,7 @@ const subtitle =
 <header>
   <div class="header-grid">
     <div>
-      <h1><a href="/">{SITE_TITLE}</a></h1>
+      <h1><a href={`/${safeLang}/`}>{SITE_TITLE}</a></h1>
       <h2>{subtitle}</h2>
     </div>
     <div class="right-stack">
@@ -41,7 +38,7 @@ const subtitle =
         alt="Alberto Pascual Corpas"
         class="avatar rounded-full"
       />
-      <a href={`/${lang}/about`} class="about-link">{t('aboutAndCV')}</a>
+      <a href={`/${safeLang}/about/`} class="about-link">{t('aboutAndCV')}</a>
     </div>
   </div>
   <nav>

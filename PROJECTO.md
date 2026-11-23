@@ -49,9 +49,9 @@ src/
 
 ## Contenido Actual
 
-- **2 posts de blog**: `disonancia-cognitiva.mdx` y `proximidad-semantica.mdx`
-- **Páginas About/CV** en español e inglés
-- **CV descargable** en `/public/download/resume.pdf`
+- **6 posts de blog**, cada uno en español e inglés (`alternate` enlaza las dos versiones). Los de dpp y el homelab llevan `featured: true` y salen marcados como destacados.
+- **Páginas About/CV** en español e inglés; CV en PDF generado desde `cv/resume.html`.
+- **Portada** con una presentación y los artículos. Inglés por defecto.
 
 ---
 

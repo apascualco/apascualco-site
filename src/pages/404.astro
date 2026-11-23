@@ -1,0 +1,58 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title="Page not found · Alberto Pascual" description="This page does not exist." />
+    <meta name="robots" content="noindex" />
+  </head>
+  <body>
+    <Header lang="en" />
+    <main id="main-content">
+      <section class="not-found">
+        <p class="code">404</p>
+        <h2>This page does not exist</h2>
+        <p>The link may be old or the address may have a typo.</p>
+        <p lang="es">
+          Esta página no existe. Puede que el enlace sea antiguo o que la dirección tenga un error.
+        </p>
+        <div class="links">
+          <a href="/en/">Home</a>
+          <a href="/en/about/">Profile &amp; CV</a>
+          <a href="/es/">Inicio en español</a>
+        </div>
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .not-found {
+    padding: 2rem 0 3rem;
+  }
+  .code {
+    margin: 0;
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--font-color-highlight);
+  }
+  h2 {
+    margin: 0.2rem 0 0.8rem;
+    color: var(--font-color-highlight);
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1.2rem;
+  }
+  .links a {
+    color: var(--font-color-highlight);
+    font-weight: 600;
+  }
+</style>

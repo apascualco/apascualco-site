@@ -1,0 +1,122 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+html,body{margin:0;background:#0f172a}
+text{font-family:"Atkinson Hyperlegible","Helvetica Neue",Arial,sans-serif}
+</style></head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="800" viewBox="0 0 1600 800">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/></marker>
+    <marker id="o" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#fb923c"/></marker>
+    <marker id="g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#4ade80"/></marker>
+    <marker id="p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+    <style>
+      .grp{fill:#111c33;stroke:#334155;stroke-width:1.5}
+      .grpl{fill:#94a3b8;font-size:15px;font-weight:700;letter-spacing:.5px}
+      .box{fill:#1e293b;stroke:#475569;stroke-width:1.5}
+      .t{fill:#e2e8f0;font-size:17px;font-weight:700}
+      .s{fill:#94a3b8;font-size:13.5px}
+      .cf{fill:#2a1a10;stroke:#fb923c}
+      .gh{fill:#1a1530;stroke:#a78bfa}
+      .mon{fill:#10241a;stroke:#4ade80}
+      .ln{stroke:#94a3b8;stroke-width:2;fill:none}
+      .lo{stroke:#fb923c;stroke-width:2.2;fill:none}
+      .lg{stroke:#4ade80;stroke-width:2;fill:none}
+      .lp{stroke:#a78bfa;stroke-width:2;fill:none;stroke-dasharray:6 5}
+      .lbl{fill:#cbd5e1;font-size:12.5px}
+    </style>
+  </defs>
+
+  <text x="40" y="52" fill="#f8fafc" font-size="28" font-weight="700">Homelab · k3s on three Raspberry Pi, all managed with Terraform</text>
+  <text x="40" y="80" class="s" font-size="16">No inbound ports for the web: traffic arrives through an outbound Cloudflare Tunnel. Deploys are pulled from GitHub, never pushed in.</text>
+
+  <rect x="40" y="130" width="250" height="70" rx="12" class="box"/>
+  <text x="62" y="160" class="t">Visitors</text>
+  <text x="62" y="182" class="s">blog · dpp · grafana (private)</text>
+
+  <rect x="40" y="235" width="250" height="345" rx="16" class="grp" style="stroke:#7c2d12"/>
+  <text x="58" y="262" class="grpl" fill="#fdba74">CLOUDFLARE</text>
+  <rect x="60" y="280" width="210" height="62" rx="10" class="box cf"/>
+  <text x="76" y="306" class="t">Edge · HTTPS</text><text x="76" y="327" class="s">DNS, TLS, cache</text>
+  <rect x="60" y="358" width="210" height="62" rx="10" class="box cf"/>
+  <text x="76" y="384" class="t">Access</text><text x="76" y="405" class="s">one-time PIN for private apps</text>
+  <rect x="60" y="436" width="210" height="62" rx="10" class="box cf"/>
+  <text x="76" y="462" class="t">Tunnel</text><text x="76" y="483" class="s">outbound only, no open ports</text>
+  <text x="62" y="530" class="s">DDoS protection and caching</text>
+  <text x="62" y="550" class="s">on the free plan</text>
+
+  <rect x="330" y="120" width="910" height="560" rx="18" class="grp"/>
+  <text x="352" y="150" class="grpl">K3S CLUSTER · 3× RASPBERRY PI 4 (8 GB) · HA CONTROL PLANE WITH EMBEDDED ETCD</text>
+
+  <rect x="352" y="175" width="180" height="62" rx="10" class="box"/>
+  <text x="368" y="201" class="t">cloudflared ×2</text><text x="368" y="222" class="s">on different nodes</text>
+  <rect x="560" y="175" width="180" height="62" rx="10" class="box"/>
+  <text x="576" y="201" class="t">Traefik</text><text x="576" y="222" class="s">ingress by hostname</text>
+
+  <rect x="772" y="168" width="446" height="214" rx="14" class="grp" style="fill:#0f1a30"/>
+  <text x="790" y="192" class="grpl">APPS</text>
+  <rect x="790" y="205" width="200" height="66" rx="10" class="box"/>
+  <text x="806" y="232" class="t">dpp</text><text x="806" y="254" class="s">Go services · ML ranking</text>
+  <rect x="1004" y="205" width="200" height="66" rx="10" class="box"/>
+  <text x="1020" y="232" class="t">blog</text><text x="1020" y="254" class="s">Astro site on nginx</text>
+  <rect x="790" y="290" width="200" height="74" rx="10" class="box gh"/>
+  <text x="806" y="317" class="t">GitHub runner</text><text x="806" y="338" class="s">private repos · deploys</text><text x="806" y="356" class="s">only in its namespace</text>
+  <rect x="1004" y="290" width="200" height="74" rx="10" class="box gh"/>
+  <text x="1020" y="317" class="t">Image updater</text><text x="1020" y="338" class="s">public repo · polls the</text><text x="1020" y="356" class="s">registry digest</text>
+
+  <rect x="352" y="410" width="560" height="170" rx="14" class="grp" style="fill:#0c1f17;stroke:#166534"/>
+  <text x="370" y="434" class="grpl" fill="#86efac">OBSERVABILITY</text>
+  <rect x="370" y="448" width="170" height="58" rx="10" class="box mon"/>
+  <text x="386" y="473" class="t">Prometheus</text><text x="386" y="493" class="s">15 days of metrics</text>
+  <rect x="556" y="448" width="170" height="58" rx="10" class="box mon"/>
+  <text x="572" y="473" class="t">Grafana</text><text x="572" y="493" class="s">dashboards · alerts</text>
+  <rect x="742" y="448" width="152" height="58" rx="10" class="box mon"/>
+  <text x="758" y="473" class="t">Exporters</text><text x="758" y="493" class="s">nodes · k8s · probes</text>
+  <text x="370" y="530" class="s">App metrics on a private port</text>
+  <text x="370" y="548" class="s">and request metrics from Traefik</text>
+  <text x="370" y="566" class="s">Alerts: heat, power, disk, nodes</text>
+
+  <rect x="940" y="410" width="278" height="170" rx="14" class="grp" style="fill:#0f1a30"/>
+  <text x="958" y="434" class="grpl">PLATFORM</text>
+  <text x="958" y="462" class="s">kube-vip: virtual API address,</text>
+  <text x="958" y="481" class="s">~20 s failover between nodes</text>
+  <text x="958" y="508" class="s">servicelb · local-path storage</text>
+  <text x="958" y="535" class="s">secrets encrypted at rest</text>
+  <text x="958" y="562" class="s">USB SSD boot on every Pi</text>
+
+  <rect x="352" y="600" width="270" height="58" rx="10" class="box"/><text x="368" y="625" class="t">Pi 1</text><text x="368" y="645" class="s">server + etcd</text>
+  <rect x="646" y="600" width="270" height="58" rx="10" class="box"/><text x="662" y="625" class="t">Pi 2</text><text x="662" y="645" class="s">server + etcd</text>
+  <rect x="940" y="600" width="278" height="58" rx="10" class="box"/><text x="956" y="625" class="t">Pi 3</text><text x="956" y="645" class="s">server + etcd</text>
+
+  <rect x="1280" y="120" width="280" height="250" rx="16" class="grp" style="stroke:#5b21b6"/>
+  <text x="1298" y="148" class="grpl" fill="#c4b5fd">GITHUB</text>
+  <rect x="1298" y="165" width="244" height="80" rx="10" class="box gh"/>
+  <text x="1314" y="192" class="t">Actions</text><text x="1314" y="213" class="s">build arm64 images</text><text x="1314" y="232" class="s">on every push to main</text>
+  <rect x="1298" y="265" width="244" height="80" rx="10" class="box gh"/>
+  <text x="1314" y="292" class="t">GHCR</text><text x="1314" y="313" class="s">container registry</text><text x="1314" y="332" class="s">tagged by commit / digest</text>
+
+  <rect x="1280" y="410" width="280" height="80" rx="12" class="box"/>
+  <text x="1298" y="438" class="t">Telegram</text><text x="1298" y="460" class="s">alerts on the phone</text><text x="1298" y="478" class="s">+ public IP changes</text>
+
+  <rect x="40" y="610" width="250" height="150" rx="16" class="grp" style="stroke:#64748b"/>
+  <text x="58" y="638" class="grpl" fill="#e2e8f0">TERRAFORM</text>
+  <text x="58" y="664" class="s">Kubernetes, Helm, Cloudflare</text>
+  <text x="58" y="684" class="s">and Grafana providers</text>
+  <text x="58" y="710" class="s">State stored in the cluster,</text>
+  <text x="58" y="730" class="s">plan must end in "No changes"</text>
+
+  <path d="M165,200 L165,280" class="lo" marker-end="url(#o)"/>
+  <path d="M270,467 C310,467 320,206 352,206" class="lo" marker-start="url(#o)"/>
+  <text x="300" y="350" class="lbl" transform="rotate(-78 300 350)">outbound tunnel</text>
+  <path d="M532,206 L560,206" class="ln" marker-end="url(#a)"/>
+  <path d="M740,206 L790,238" class="ln" marker-end="url(#a)"/>
+  <path d="M1420,245 L1420,265" class="lp" marker-end="url(#p)"/>
+  <path d="M1298,305 C1260,305 1230,327 1204,327" class="lp" marker-start="url(#p)"/>
+  <path d="M1298,215 C1258,215 1258,281 1215,281 L985,281 L985,290" class="lp" marker-start="url(#p)"/>
+  <text x="790" y="401" class="lbl">Both connect out to GitHub: the runner pulls jobs, the updater polls the registry</text>
+  <path d="M700,506 L700,590 L1255,590 L1255,450 L1280,450" class="lg" marker-end="url(#g)"/>
+  <path d="M290,690 C320,690 330,650 352,640" class="ln" marker-end="url(#a)"/>
+  <path d="M165,610 L165,580" class="ln" marker-end="url(#a)"/>
+</svg>
+</body></html>

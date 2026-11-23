@@ -8,15 +8,27 @@ import Header from '../components/Header.astro';
 import StructuredData from '../components/StructuredData.astro';
 import { useTranslations } from '../i18n/translations';
 
-type Props = CollectionEntry<'blog'>['data'] & { readingTime?: number };
+type Props = CollectionEntry<'blog'>['data'] & { readingTime?: number; slug?: string };
 
-const { title, description, pubDate, updatedDate, heroImage, lang, readingTime } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, lang, readingTime, slug, alternate } =
+  Astro.props;
 const t = useTranslations(lang);
+const otherLang = lang === 'es' ? 'en' : 'es';
+const alternates =
+  slug && alternate
+    ? { [lang]: `/${lang}/blog/${slug}/`, [otherLang]: `/${otherLang}/blog/${alternate}/` }
+    : { [lang]: Astro.url.pathname, [otherLang]: `/${otherLang}/` };
 ---
 
 <html lang={lang}>
   <head>
-    <BaseHead title={title} description={description} image={heroImage} type="article" />
+    <BaseHead
+      title={title}
+      description={description}
+      image={heroImage}
+      type="article"
+      alternates={alternates}
+    />
     <StructuredData
       type="BlogPosting"
       title={title}
