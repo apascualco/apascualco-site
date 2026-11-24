@@ -92,7 +92,7 @@ Para saber si el entrenamiento funciona, construí un simulador de viajeros con 
 
 **Un modelo no puede aprender de lo que nunca ve.**
 
-Todo corre en mi [homelab](/es/blog/homelab-tres-raspberry-pi/): cada push construye las imágenes en GitHub Actions y un runner dentro del clúster las despliega. Como la demo es pública, las entradas tienen límites, cada servicio tiene su techo de CPU y memoria, y las métricas me dicen si alguien lo usa.
+Todo corre en mi [homelab](/es/blog/homelab-tres-raspberry-pi/): cada push construye las imágenes en GitHub Actions y un runner dentro del clúster las despliega. Lo tengo en privado, detrás de Cloudflare Access, pero lo trato como si fuera público: las entradas tienen límites, cada servicio tiene su techo de CPU y memoria y todo expone métricas.
 
 # 5. Explicar cada número
 
@@ -121,7 +121,7 @@ No quiero venderlo como algo que no es:
 - los datos son sintéticos: el proveedor y los viajeros son simulados, y el comportamiento real es bastante más ruidoso,
 - el modelo es deliberadamente sencillo, con solo cuatro rasgos,
 - la similitud no se aprende: la calculo a partir de perfiles que defino yo, como la aerolínea, la franja de salida, las escalas y la banda de precio,
-- y la demo pública no guarda eventos, a propósito, así que no aprende de quien la visita.
+- y la versión desplegada no guarda eventos, a propósito, así que lo que se hace en ella no alimenta el entrenamiento.
 
 # 7. Reflexión
 

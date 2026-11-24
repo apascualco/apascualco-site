@@ -92,7 +92,7 @@ And the fourth? The model learned **0**. At first I thought it was a bug, but it
 
 **A model can't learn from what it never sees.**
 
-It all runs on my [homelab](/en/blog/homelab-three-raspberry-pi/): every push builds the images in GitHub Actions and a runner inside the cluster rolls them out. Since the demo is public, inputs are capped, each service has its own CPU and memory ceiling, and the metrics tell me whether anyone uses it.
+It all runs on my [homelab](/en/blog/homelab-three-raspberry-pi/): every push builds the images in GitHub Actions and a runner inside the cluster rolls them out. It's private, behind Cloudflare Access, but I treat it as if it were public: inputs are capped, each service has its own CPU and memory ceiling, and everything exposes metrics.
 
 # 5. Explaining every number
 
@@ -122,7 +122,7 @@ I don't want to sell it as something it isn't:
 - the data is synthetic: both the provider and the travelers are simulated, and real behavior is much noisier,
 - the model is deliberately simple, with only four features,
 - similarity isn't learned: I compute it from profiles I define myself, such as the airline, the departure slot, the stops and the price band,
-- and the public demo doesn't store events, on purpose, so it doesn't learn from its visitors.
+- and the deployed version doesn't store events, on purpose, so nothing done on it feeds the training.
 
 # 7. Reflection
 
